@@ -12,7 +12,7 @@ const GetStarted = () => {
                 selectedDevice === null ?
                 <SelectBridge selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice} />
                 :
-                <BridgeConnectionProcess />
+                <BridgeConnectionProcess selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice} />
             }
         </div>
     )
