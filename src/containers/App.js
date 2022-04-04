@@ -1,13 +1,14 @@
 import React from 'react';
 
 import '../assets/css/App.css';
+import '../assets/css/bootstrap.css';
 
-import HelloWorld from '../components/App/HelloWorld';
+import GetStarted from '../components/GetStarted';
 
 function App() {
   return (
-    <div>
-      <HelloWorld />
+    <div className='container centered'>
+        <GetStarted />
     </div>
   );
 }

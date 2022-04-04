@@ -17,7 +17,7 @@ const lookupMacAddress = async (ipaddress) => {
         return { mac, name: lookup.split('\n')[0] };
         }
     } else {
-        return { mac: "not found", name: 'not found'};
+        return { mac: null, name: null};
     }
   } catch (e) {
     console.log(e);
@@ -52,7 +52,7 @@ const localIps = async (ipAddress) => {
   return hosts.filter(Boolean);
 };
 
-const localIpsBatch = async (ipAddresses) => {
+const localIpsBatch = async (ipAddresses, name = "") => {
     const addressBlocks = ipAddresses.map(ipAddress => ipAddress.substring(0, ipAddress.lastIndexOf('.')));
   
     //const ipBlock = [...Array(254).keys()];
@@ -70,7 +70,10 @@ const localIpsBatch = async (ipAddresses) => {
         return checkIpAndPrintInfo(`${i}`)
     }));
   
-    return hosts.filter(Boolean);
+    if(name !== "")
+      return hosts.filter(Boolean).filter((host) => host.mac !== null && host.name === name)
+    else
+      return hosts.filter(Boolean).filter((host) => host.mac !== null);
   };
 
 const getPrivateIps = () => {

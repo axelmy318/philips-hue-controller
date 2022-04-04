@@ -27,8 +27,8 @@ if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1300, 
-    height: 500, 
+    width: 1920, 
+    height: 1080, 
     show: false,
     webPreferences: {
       nodeIntegration: true,
@@ -108,7 +108,7 @@ ipcMain.handle('catch-on-main', async(event, arg) => {
 ipcMain.handle('GET_LOCAL_DEVICES', async(event, arg) => {
   let result;
   console.log(findIps.getPrivateIps())
-  await findIps.localIpsBatch(findIps.getPrivateIps()).then(devices => {
+  await findIps.localIpsBatch(findIps.getPrivateIps(), "Philips Lighting BV").then(devices => {
     result = devices
   })
 
