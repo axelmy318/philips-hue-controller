@@ -7,7 +7,6 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
   //const [ deviceList, setDeviceList ] = useState({isLoaded:true,content:[{ip:"192.168.22.50",mac:"00:17:88:20:48:f4",name:"Philips Lighting BV"},{ip:"192.168.22.56",mac:"00:17:88:20:45:5d",name:"Philips Lighting BV"}],error:null})
   
   const loadDeviceList = () => {
-    console.log('Sending IPC...')
     setDeviceList({isLoaded: 'pending', content: [], error: null})
 
     //ipcRenderer.invoke('catch-on-main', 'ping').then((result) => console.log('Result is ', result))

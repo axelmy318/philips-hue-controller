@@ -109,24 +109,8 @@ ipcMain.handle('GET_LOCAL_DEVICES', async(event, arg) => {
   let result;
   console.log(findIps.getPrivateIps())
   await axios.get("https://discovery.meethue.com/").then(response => {
-    console.log(response)
-  
     result = response.data
   })
-  /*await findIps.localIpsBatch(findIps.getPrivateIps(), "Philips Lighting BV").then(devices => {
-    result = devices
-  })*/
 
   return result
-})      
-
-ipcMain.handle('GET_HUE_BRIDGES', async(event, arg) => {
-  let result
-  await axios.get("https://discovery.meethue.com/").then(response => {
-    console.log(response)
-  
-    result = response.data
-  })
-
-  return 
-})
+}) 
