@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 
 const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const MAX_TIME = 30
+    const [ name, setName ] = useState("")
     const [ started, setStarted ] = useState(false)
     const [ timeRemaining, setTimeRemaining ] = useState(MAX_TIME)
     const [ APIData, setAPIData ] = useState(null)
@@ -36,9 +37,14 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                 { !started && 
                     <>
                     <p className='text-big'>Once you click on start, you will have {timeRemaining} seconds to press to link button on your HUE bridge.</p>
-                    
+                    <br />
+                    <div className='row'>
+                        <div className='col md-4'></div>
+                        <div className='col md-4'><input value={name} onChange={(e) => setName(e.target.value)} class="form-control form-control-lg" type="text" placeholder="Name your HUE bridge" /></div>
+                        <div className='col md-4'></div>
+                    </div>
                     <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>&nbsp;
-                    <button className='btn btn-success btn-lg mt-4' onClick={() => setStarted(true)}>Start</button>
+                    <button className='btn btn-success btn-lg mt-4' disabled={!(name !== "")} onClick={() => setStarted(true)}>Start</button>
                     </>
                 }
                 { started && timeRemaining >= 0 && APIData === null &&
