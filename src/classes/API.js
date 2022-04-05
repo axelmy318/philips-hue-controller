@@ -8,8 +8,6 @@ class API {
         //User
         URL.requests['BRIDGE_CONNECTION'] = ''
 
-        console.log((URL.BASE_URL+URL.requests[request]).replace('__IP__', ip))
-
         return (URL.BASE_URL+URL.requests[request]).replace('__IP__', ip)
     }
 }

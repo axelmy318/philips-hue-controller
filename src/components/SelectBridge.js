@@ -24,8 +24,7 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
           <div className='device-list-viewport'>
             <div className='col md-3'></div>
             <div className='col md-6'>
-              <div className='row'>
-              { deviceList.content.length > 0 ? <>{
+              { deviceList.content.length > 0 ? <><div className='row'>{
                   deviceList.content.map((device, index) => <div key={index} className="card" style={{width: '48%'}}>
                     <img src={HueBridge} className="card-img-top" alt="..." />
                     <div className="card-body">
@@ -37,13 +36,12 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
                     </div>
                   </div>
                   )
-                }</>
+                }</div></>
                 :
                 <>
                   We couldn't find any HUE Bridge in your network. <br />Make sure you are connected to the same network as your HUE Bridges
                 </>
               }
-              </div>
             </div>
             <div className='col md-3'></div>
           </div>

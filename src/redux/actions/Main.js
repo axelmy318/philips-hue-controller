@@ -3,7 +3,7 @@ import API from "../../classes/API"
 
 export const getBridgeUsername = (IP, device, name) => {
     const endpoint = API.getUrl(IP, 'BRIDGE_CONNECTION')
-    console.log(endpoint)
+    
     return {
         type: 'GET_BRIDGE_USERNAME',
         data: {

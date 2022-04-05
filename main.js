@@ -100,6 +100,10 @@ app.on('activate', () => {
   mainWindow.send("catch-on-renderer", 'pong')
 })*/
 
+ipcMain.handle('SAVE_TO_STORAGE', async(event, arg) => {
+  
+})
+
 ipcMain.handle('catch-on-main', async(event, arg) => {
   const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1')
   return response.data
@@ -107,7 +111,7 @@ ipcMain.handle('catch-on-main', async(event, arg) => {
 
 ipcMain.handle('GET_LOCAL_DEVICES', async(event, arg) => {
   let result;
-  
+
   await axios.get("https://discovery.meethue.com/").then(response => {
     result = response.data
   })
