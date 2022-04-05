@@ -21,7 +21,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     }
 
     const handleApproveBridge = () => {
-        dispatch(approveBridge(selectedDevice))
+        dispatch(approveBridge(selectedDevice, name))
     }
 
     useEffect(() => {

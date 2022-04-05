@@ -20,12 +20,13 @@ export const getBridgeUsername = (IP, device, name) => {
     }
 }
 
-export const approveBridge = (device) => {
+export const approveBridge = (device, name) => {
     return {
         type: 'APPROVE_BRIDGE',
         payload: {
             device,
-            id: device.id
+            id: device.id,
+            name
         }
     }
 }

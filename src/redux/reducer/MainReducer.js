@@ -44,7 +44,7 @@ const MainReducer = (state = initialState, action) => {
             bridge = state.bridgesConnexions.success[action.payload.id]
             delete state.bridgesConnexions.success[action.payload.id]
 
-            state.bridges[bridge.id] = bridge
+            state.bridges[bridge.id] = {...bridge, name: action.payload.name}
               
             ipcRenderer.invoke('SAVE_TO_STORAGE', {
                 key: 'main',
