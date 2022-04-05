@@ -107,7 +107,7 @@ ipcMain.handle('catch-on-main', async(event, arg) => {
 
 ipcMain.handle('GET_LOCAL_DEVICES', async(event, arg) => {
   let result;
-  console.log(findIps.getPrivateIps())
+  
   await axios.get("https://discovery.meethue.com/").then(response => {
     result = response.data
   })
