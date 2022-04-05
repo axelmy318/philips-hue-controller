@@ -1,5 +1,5 @@
 class API {
-    static getUrl = ({ ip, request }) => {
+    static getUrl = (ip, request) => {
         const URL = {
             BASE_URL: 'https://__IP__/api/',
             requests: []
@@ -8,7 +8,7 @@ class API {
         //User
         URL.requests['BRIDGE_CONNECTION'] = ''
 
-        return URL.BASE_URL+URL.requests[request]
+        return URL.BASE_URL+URL.requests[request].replace('__IP__', ip)
     }
 }
 

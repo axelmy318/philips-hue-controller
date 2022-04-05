@@ -1,4 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getBridgeUsername } from '../redux/actions/Main'
 
 const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const MAX_TIME = 30
@@ -6,9 +8,13 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const [ started, setStarted ] = useState(false)
     const [ timeRemaining, setTimeRemaining ] = useState(MAX_TIME)
     const [ APIData, setAPIData ] = useState(null)
+    const dispatch = useDispatch()
+    const bridges = useSelector(API => API.Main)
+
+    console.log(bridges)
 
     const checkIfBridgeConnectionIsValid = () => {
-        
+        dispatch(getBridgeUsername())
     }
 
     const goBackToSelectionMenu = () => {
@@ -17,9 +23,14 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if(started) {
+            if(started && APIData === null) {
                 setTimeRemaining(timeRemaining-1)
-                checkIfBridgeConnectionIsValid()
+
+                if(bridges.bridgesConnexions.success[selectedDevice.key])
+                    setAPIData(bridges.bridgesConnexions.success[selectedDevice.key])
+
+                checkIfBridgeConnectionIsValid(selectedDevice.internalipaddress, selectedDevice)
+                //if()
             }
         }, 1000);
 
@@ -40,7 +51,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                     <br />
                     <div className='row'>
                         <div className='col md-4'></div>
-                        <div className='col md-4'><input value={name} onChange={(e) => setName(e.target.value)} class="form-control form-control-lg" type="text" placeholder="Name your HUE bridge" /></div>
+                        <div className='col md-4'><input value={name} onChange={(e) => setName(e.target.value)} className="form-control form-control-lg" type="text" placeholder="Name your HUE bridge" /></div>
                         <div className='col md-4'></div>
                     </div>
                     <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>&nbsp;
@@ -50,8 +61,14 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                 { started && timeRemaining >= 0 && APIData === null &&
                     <>
                     <p className='text-big'>You now have {Math.max(0, timeRemaining)} seconds to go click the link button on your HUE bridge !</p>
-                    <div className="progress mt-4">
-                        <div className="progress-bar" role="progressbar" style={{width: `${timeRemaining / MAX_TIME * 100}%`}} aria-valuenow={timeRemaining / MAX_TIME * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                    <div className='row mt-4'>
+                        <div className='col md-4'></div>
+                        <div className='col md-4'>
+                            <div className="progress">
+                                <div className="progress-bar" role="progressbar" style={{width: `${timeRemaining / MAX_TIME * 100}%`}} aria-valuenow={timeRemaining / MAX_TIME * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div className='col md-4'></div>
                     </div>
                     <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>
                     </>
