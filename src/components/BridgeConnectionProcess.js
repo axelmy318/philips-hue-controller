@@ -14,7 +14,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     console.log(bridges)
 
     const checkIfBridgeConnectionIsValid = () => {
-        dispatch(getBridgeUsername())
+        dispatch(getBridgeUsername(selectedDevice.internalipaddress, selectedDevice, name))
     }
 
     const goBackToSelectionMenu = () => {
@@ -29,7 +29,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                 if(bridges.bridgesConnexions.success[selectedDevice.key])
                     setAPIData(bridges.bridgesConnexions.success[selectedDevice.key])
 
-                checkIfBridgeConnectionIsValid(selectedDevice.internalipaddress, selectedDevice)
+                checkIfBridgeConnectionIsValid()
                 //if()
             }
         }, 1000);
