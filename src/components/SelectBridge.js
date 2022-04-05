@@ -3,13 +3,12 @@ import { ipcRenderer } from 'electron';
 import HueBridge from '../assets/img/hue-bridge.jpg'
 
 const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
-  //const [ deviceList, setDeviceList ] = useState({isLoaded: false, content: [], error: null})
-  const [ deviceList, setDeviceList ] = useState({isLoaded:true,content:[{id: '001788fffe2048f4', internalipaddress:"192.168.22.50"},{internalipaddress:"192.168.22.56",id:"001788fffe20455d"}],error:null})
+  const [ deviceList, setDeviceList ] = useState({isLoaded: false, content: [], error: null})
+  //const [ deviceList, setDeviceList ] = useState({isLoaded:true,content:[{id: '001788fffe2048f4', internalipaddress:"192.168.22.50"},{internalipaddress:"192.168.22.56",id:"001788fffe20455d"}],error:null})
   
   const loadDeviceList = () => {
     setDeviceList({isLoaded: 'pending', content: [], error: null})
 
-    //ipcRenderer.invoke('catch-on-main', 'ping').then((result) => console.log('Result is ', result))
     ipcRenderer.invoke('GET_LOCAL_DEVICES', 'ping').then((result) => setDeviceList({isLoaded: true, content: result, error: null}))
   }
 

@@ -1,11 +1,12 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBridgeUsername, getBridgeUsernameFake } from '../redux/actions/Main'
+import { approveBridge, getBridgeUsername } from '../redux/actions/Main'
 
 const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
-    const MAX_TIME = 30
+    const MAX_TIME = 45
     const [ name, setName ] = useState("")
     const [ started, setStarted ] = useState(false)
+    const [ hasToPressButton, setHasToPressButton ] = useState(false)
     const [ timeRemaining, setTimeRemaining ] = useState(MAX_TIME)
     const [ APIData, setAPIData ] = useState(null)
     const dispatch = useDispatch()
@@ -15,23 +16,22 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
         dispatch(getBridgeUsername(selectedDevice.internalipaddress, selectedDevice, name))
     }
 
-    const fakeCorrectBridge = () => {
-        dispatch(getBridgeUsernameFake(selectedDevice.internalipaddress, selectedDevice, name))
-    }
-
     const goBackToSelectionMenu = () => {
         setSelectedDevice(null)
     }
 
-    console.log(APIData)
+    const handleApproveBridge = () => {
+        dispatch(approveBridge(selectedDevice))
+    }
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if(started && APIData === null) {
+            if(started && APIData === null && hasToPressButton) {
                 setTimeRemaining(timeRemaining-1)
-
-                checkIfBridgeConnectionIsValid()
             }
+            
+            if(APIData === null)
+                checkIfBridgeConnectionIsValid()
         }, 1000);
 
         if(timeRemaining <= 0){
@@ -43,11 +43,16 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
       }, [timeRemaining, started, APIData]);
 
 
-      useEffect(() => {
-        if(APIData === null && bridges.bridgesConnexions.success[selectedDevice.id] !== undefined){
-            console.log('Bridge has connected, settings value now')
-            setAPIData(bridges.bridgesConnexions.success[selectedDevice.id])
+    useEffect(() => {
+        if(bridges.bridgesConnexions.errors[selectedDevice.id] !== undefined) {
+            //If button link has to be pressed
+            if(bridges.bridgesConnexions.errors[selectedDevice.id].type === 101) {
+                setHasToPressButton(true)
+            }
         }
+
+        if(APIData === null && bridges.bridgesConnexions.success[selectedDevice.id] !== undefined)
+            setAPIData(bridges.bridgesConnexions.success[selectedDevice.id])
     })
 
     return (
@@ -66,7 +71,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                     <button className='btn btn-success btn-lg mt-4' disabled={!(name !== "")} onClick={() => setStarted(true)}>Start</button>
                     </>
                 }
-                { started && timeRemaining >= 0 && APIData === null &&
+                { started && timeRemaining >= 0 && APIData === null && hasToPressButton &&
                     <>
                     <p className='text-big'>You now have {Math.max(0, timeRemaining)} seconds to go click the link button on your HUE bridge !</p>
                     <div className='row mt-4'>
@@ -79,7 +84,16 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                         <div className='col md-4'></div>
                     </div>
                     <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>
-                    <button className='btn btn-lg btn-warning mt-4' onClick={fakeCorrectBridge}>Fake bridge</button>
+                    </>
+                }
+                { started && timeRemaining >= 0 && APIData === null && !hasToPressButton &&
+                    <>
+                    <p className='text-big'>Trying to connect to your HUE bridge...</p>
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <br />
+                    <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>
                     </>
                 }
                 { started && timeRemaining <= 0 && APIData === null &&
@@ -91,7 +105,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                 { started && APIData !== null &&
                     <>
                     <p className='text-big'>The HUE bridge successfully connected.</p>
-                    <button className='btn btn-secondary mt-4' onClick={goBackToSelectionMenu}>Next</button>
+                    <button className='btn btn-primary mt-4' onClick={handleApproveBridge}>Next</button>
                     </>
                 }
             </div>

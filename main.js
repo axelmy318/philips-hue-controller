@@ -14,6 +14,8 @@ const findIps = require('./findIps')
 const path = require('path')
 const url = require('url')
 
+const storage = require('electron-json-storage')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -95,13 +97,14 @@ app.on('activate', () => {
   }
 });
 
-/*ipcMain.on("catch-on-main", (event, arg) => {
-  console.log('here 001', arg)
-  mainWindow.send("catch-on-renderer", 'pong')
-})*/
-
 ipcMain.handle('SAVE_TO_STORAGE', async(event, arg) => {
+  const defaultDataPath = storage.getDefaultDataPath()
   
+  if(defaultDataPath) {
+    storage.set(arg.key, arg.data, function(error) {
+      if (error) throw error;
+    });
+  }
 })
 
 ipcMain.handle('catch-on-main', async(event, arg) => {
@@ -118,3 +121,19 @@ ipcMain.handle('GET_LOCAL_DEVICES', async(event, arg) => {
 
   return result
 }) 
+
+ipcMain.handle('GET_FROM_STORAGE', async(event, arg) => {
+  let result
+  
+  await new Promise((resolve, reject) => {
+    storage.get(arg.key, (error, value) => {
+     if (error) {
+      reject(error)
+     } else {
+      resolve(value)
+     }
+    })
+   }).then(response => result = response)
+
+   return result
+})

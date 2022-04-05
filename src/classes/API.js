@@ -1,7 +1,7 @@
 class API {
     static getUrl = (ip, request) => {
         const URL = {
-            BASE_URL: 'https://__IP__/api/',
+            BASE_URL: 'http://__IP__/api/',
             requests: []
         }
 

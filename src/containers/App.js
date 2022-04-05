@@ -3,13 +3,12 @@ import React from 'react';
 import '../assets/css/App.css';
 import '../assets/css/bootstrap.css';
 
-import GetStarted from '../components/GetStarted';
+import PhilipsHUEController from '../components/PhilipsHUEController';
+
 
 function App() {
   return (
-    <div className='container centered'>
-        <GetStarted />
-    </div>
+    <PhilipsHUEController />
   );
 }
 
