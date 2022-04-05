@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBridgeUsername } from '../redux/actions/Main'
+import { getBridgeUsername, getBridgeUsernameFake } from '../redux/actions/Main'
 
 const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const MAX_TIME = 30
@@ -11,26 +11,26 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const dispatch = useDispatch()
     const bridges = useSelector(API => API.Main)
 
-    console.log(bridges)
-
     const checkIfBridgeConnectionIsValid = () => {
         dispatch(getBridgeUsername(selectedDevice.internalipaddress, selectedDevice, name))
+    }
+
+    const fakeCorrectBridge = () => {
+        dispatch(getBridgeUsernameFake(selectedDevice.internalipaddress, selectedDevice, name))
     }
 
     const goBackToSelectionMenu = () => {
         setSelectedDevice(null)
     }
 
+    console.log(APIData)
+
     useEffect(() => {
         const interval = setInterval(() => {
             if(started && APIData === null) {
                 setTimeRemaining(timeRemaining-1)
 
-                if(bridges.bridgesConnexions.success[selectedDevice.key])
-                    setAPIData(bridges.bridgesConnexions.success[selectedDevice.key])
-
                 checkIfBridgeConnectionIsValid()
-                //if()
             }
         }, 1000);
 
@@ -40,7 +40,15 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
         }
 
         return () => clearInterval(interval)
-      }, [timeRemaining, started]);
+      }, [timeRemaining, started, APIData]);
+
+
+      useEffect(() => {
+        if(APIData === null && bridges.bridgesConnexions.success[selectedDevice.id] !== undefined){
+            console.log('Bridge has connected, settings value now')
+            setAPIData(bridges.bridgesConnexions.success[selectedDevice.id])
+        }
+    })
 
     return (
         <div className='bridge-connection-process'>
@@ -71,6 +79,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
                         <div className='col md-4'></div>
                     </div>
                     <button className='btn btn-lg btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>
+                    <button className='btn btn-lg btn-warning mt-4' onClick={fakeCorrectBridge}>Fake bridge</button>
                     </>
                 }
                 { started && timeRemaining <= 0 && APIData === null &&

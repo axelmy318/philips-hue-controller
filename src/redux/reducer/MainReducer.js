@@ -17,7 +17,7 @@ const MainReducer = (state = initialState, action) => {
         case 'GET_BRIDGE_USERNAME_FULFILLED':
             state.bridgesConnexions.success[action.payload.data.device.id] = {
                 ...action.payload.data.device,
-                ...action.payload.promise.data
+                ...action.payload.promise.data[0]
             }
             return {...state}
         case 'GET_BRIDGE_USERNAME_REJECTED':

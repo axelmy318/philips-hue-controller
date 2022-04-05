@@ -6,9 +6,21 @@ export const getBridgeUsername = (IP, device, name) => {
     
     return {
         type: 'GET_BRIDGE_USERNAME',
-        data: {
+        payload: {
             promise: axios.post(`${endpoint}`, {devicetype: name}),
-            device
+            data: {device}
+        }
+    }
+}
+
+export const getBridgeUsernameFake = (IP, device, name) => {
+    const endpoint = API.getUrl(IP, 'BRIDGE_CONNECTION')
+    
+    return {
+        type: 'GET_BRIDGE_USERNAME_FULFILLED',
+        payload: {
+            promise: {data: [{username: 'dwadwadwadawd'}]},
+            data: {device}
         }
     }
 }
