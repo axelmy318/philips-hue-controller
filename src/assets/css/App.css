@@ -24,6 +24,10 @@ body {
   font-size: 150%;
 }
 
+.text-125 {
+  font-size: 125%;
+}
+
 .device-list {
   display: block;
   max-width: 50%;

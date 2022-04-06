@@ -1,5 +1,5 @@
 class API {
-    static getUrl = (ip, request) => {
+    static getUrl = (device, request) => {
         const URL = {
             BASE_URL: 'http://__IP__/api/',
             requests: []
@@ -7,8 +7,10 @@ class API {
 
         //User
         URL.requests['BRIDGE_CONNECTION'] = ''
+        URL.requests['VALIDATE_BRIDGE_CONNECTION'] = '0/config'
+        URL.requests['LOAD_LIGHTS_FOR_BRIDGE'] = '__USERNAME__/lights'
 
-        return (URL.BASE_URL+URL.requests[request]).replace('__IP__', ip)
+        return (URL.BASE_URL+URL.requests[request]).replace('__IP__', device.internalipaddress).replace('__USERNAME__', device.username ? device.username : '__USERNAME__')
     }
 }
 

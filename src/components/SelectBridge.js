@@ -19,19 +19,20 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
     <div>
       <p className='text-big'>To get started, find your <i>HUE Bridge</i> in the list below.</p>
       <div className='device-list'>
-        <div className='row'>
+        <div className='row align-items-center'>
           <div className='device-list-viewport'>
-            <div className='col md-3'></div>
             <div className='col md-6'>
-              { deviceList.content.length > 0 ? <><div className='row'>{
-                  deviceList.content.map((device, index) => <div key={index} className="card" style={{width: '48%'}}>
+              { deviceList.content.length > 0 ? <><div className='row align-items-center row-cols-1 row-cols-md-2 g-1'>{
+                  deviceList.content.map((device, index) => <div key={index} className='col'>
+                    <div className="card">
                     <img src={HueBridge} className="card-img-top" alt="..." />
-                    <div className="card-body">
-                      <h5 className="card-title">HUE Bridge</h5>
-                      {device.id && <p className="card-text"># ID<br /> {device.id}</p>}
-                      {device.internalipaddress && <p className="card-text">IP address<br /> {device.internalipaddress}</p>}
-                      {device.id && <p className="card-text">MAC address<br /> {(device.id.slice(0, 6)+device.id.slice(10, device.id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</p>}
-                      <button className="btn btn-primary" onClick={() => setSelectedDevice(device)}>Select</button>
+                      <div className="card-body">
+                        <h5 className="card-title">HUE Bridge</h5>
+                        {device.id && <p className="card-text"># ID<br /> {device.id}</p>}
+                        {device.internalipaddress && <p className="card-text">IP address<br /> {device.internalipaddress}</p>}
+                        {device.id && <p className="card-text">MAC address<br /> {(device.id.slice(0, 6)+device.id.slice(10, device.id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</p>}
+                        <button className="btn btn-primary" onClick={() => setSelectedDevice(device)}>Select</button>
+                      </div>
                     </div>
                   </div>
                   )
@@ -42,7 +43,6 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
                 </>
               }
             </div>
-            <div className='col md-3'></div>
           </div>
         </div>
       { deviceList.isLoaded !== 'pending' ?

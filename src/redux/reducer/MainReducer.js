@@ -1,4 +1,5 @@
 import { ipcRenderer } from "electron"
+import { Status } from "../../classes/Status"
 
 const initialState = {
     loadedFromLocalStorage: false,
@@ -11,7 +12,7 @@ const initialState = {
 
 const MainReducer = (state = initialState, action) => {
     action = action.action ? action.action : action 
-    let data, bridge
+    let data, bridge, id
 
     switch(action.type) {
         case 'GET_BRIDGE_USERNAME_PENDING':
@@ -54,7 +55,61 @@ const MainReducer = (state = initialState, action) => {
             return {...state}
         case 'LOAD_MAIN_FROM_STORAGE':
             state.loadedFromLocalStorage = true
+            
             state.bridges = action.payload.data
+            
+            Object.keys(state.bridges).map((id) => {
+                state.bridges[id].validConnection = Status.None
+                state.bridges[id].lightsLoaded = Status.None
+                state.bridges[id].lights = {}
+            })
+            
+            return {...state}
+        case 'VALIDATE_BRIDGE_CONNECTION_PENDING':
+            id = action.payload.device.id
+            if(state.bridges[id])
+                state.bridges[id].validConnection = Status.Pending
+            
+            return {...state}
+        case 'VALIDATE_BRIDGE_CONNECTION_FULFILLED':
+            id = action.payload.data.device.id
+            if(state.bridges[id]){
+                let previousState = state.bridges[id]
+                state.bridges[id] = {
+                    ...previousState,
+                    ...action.payload.promise.data,
+                    validConnection: Status.Fulfilled,
+                }
+            }
+            
+            return {...state}
+        case 'VALIDATE_BRIDGE_CONNECTION_REJECTED':
+            id = action.payload.data.device.id
+            if(state.bridges[id])
+                state.bridges[id].validConnection = Status.Rejected
+            
+            return {...state}
+        case 'LOAD_LIGHTS_FOR_BRIDGE_PENDING':
+            id = action.payload.device.id
+            if(state.bridges[id])
+                state.bridges[id].loadLights = Status.Pending
+
+            return {...state}
+        case 'LOAD_LIGHTS_FOR_BRIDGE_FULFILLED':
+            id = action.payload.data.device.id
+            if(state.bridges[id]){
+                state.bridges[id].lightsLoaded = Status.Fulfilled
+                state.bridges[id].lights = action.payload.promise.data
+            }
+
+            console.log(state)
+
+            return {...state}
+        case 'LOAD_LIGHTS_FOR_BRIDGE_REJECTED':
+            id = action.payload.data.device.id
+            if(state.bridges[id])
+                state.bridges[id].loadLights = Status.Rejected
+
             return {...state}
         case 'EMPTY_BRIDGES':
             state.bridges = {}

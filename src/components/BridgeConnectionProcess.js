@@ -13,7 +13,7 @@ const BridgeConnectionProcess = ({ selectedDevice, setSelectedDevice }) => {
     const bridges = useSelector(API => API.Main)
 
     const checkIfBridgeConnectionIsValid = () => {
-        dispatch(getBridgeUsername(selectedDevice.internalipaddress, selectedDevice, name))
+        dispatch(getBridgeUsername(selectedDevice, name))
     }
 
     const goBackToSelectionMenu = () => {

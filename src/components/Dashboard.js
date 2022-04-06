@@ -1,38 +1,73 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { emptyBridges } from '../redux/actions/Main'
+import { Status } from '../classes/Status'
+import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/Main'
+import BridgeList from './BridgeList'
+import Sidebar from './Sidebar'
 
 const Dashboard = () => {
-    const dispatch = useDispatch()
     const main = useSelector(API => API.Main)
+    const dispatch = useDispatch()
     const bridges = main.bridges
 
-    const handleEmptyBridges = () => {
-      dispatch(emptyBridges())
+    const menus = {
+      bridges: {
+        id: "bridges",
+        icon: null,
+        name: 'Bridges',
+        component: <BridgeList />
+      },
+      lighting: {
+        id: "lighting",
+        icon: null,
+        name: 'Lighting',
+        component: null
+      },
+      presets: {
+        id: "presets",
+        icon: null,
+        name: 'Presets',
+        component: null
+      },
     }
 
+    const [ selectedMenu, setSelectedMenu ] = useState(menus['bridges'].id)
+
+    useEffect(() => {
+      Object.keys(bridges).map(bridgeId => {
+        let bridge = bridges[bridgeId]
+
+        // If the app already validated the bridge connection
+        if(bridge.validConnection === Status.Fulfilled) {
+          // Load lights
+          if(bridge.lightsLoaded === Status.None) {
+            dispatch(loadLightsForBridge(bridge))
+          }
+        }
+        // Validate the bridge connection
+        else if(bridge.validConnection === Status.None) {
+          dispatch(validateBridgeConnection(bridge))
+        }
+
+      })
+    }, [main])
+    
 
     return (
       <>
-        <h1>Dashboard</h1>
-
-        {console.log(Object.keys(bridges))}
-
-        { Object.keys(bridges).map((key, index) => <>
-          <div key={index} className="card" style={{width: '48%'}}>
-            <div className="card-body">
-              <h5 className="card-title">{bridges[key].name}</h5>
-              {bridges[key].id && <p className="card-text"># ID<br /> {bridges[key].id}</p>}
-              {bridges[key].internalipaddress && <p className="card-text">IP address<br /> {bridges[key].internalipaddress}</p>}
-              {bridges[key].username && <p className="card-text">username<br /> {bridges[key].username}</p>}
+      <div className='container-fluid p-0'>
+        <main>
+          <div className='row w-100'>
+            <div className='col-2'>
+              <Sidebar selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} menus={menus} />
+            </div>
+            <div className='col-10'>
+              {menus[selectedMenu].component}
             </div>
           </div>
-        </>)
-
-        }
-
-        <button className='btn btn-danger' onClick={handleEmptyBridges}>Empty bridges record</button>
+          </main>
+        </div>
       </>
     )
 }

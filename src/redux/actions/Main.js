@@ -8,14 +8,42 @@ const headersJSON = {
     }
 }
 
-export const getBridgeUsername = (IP, device, name) => {
-    const endpoint = API.getUrl(IP, 'BRIDGE_CONNECTION')
+export const getBridgeUsername = (device, name) => {
+    const endpoint = API.getUrl(device, 'BRIDGE_CONNECTION')
     
     return {
         type: 'GET_BRIDGE_USERNAME',
         payload: {
             promise: axios.post(`${endpoint}`, JSON.stringify({devicetype: name}), {headersJSON}),
             data: {device}
+        }
+    }
+}
+
+export const validateBridgeConnection = device => {
+    const endpoint = API.getUrl(device, 'VALIDATE_BRIDGE_CONNECTION')
+
+    return {
+        type: 'VALIDATE_BRIDGE_CONNECTION',
+        payload: {
+            promise: axios.get(`${endpoint}`),
+            data: {
+                device
+            }
+        }
+    }
+}
+
+export const loadLightsForBridge = device => {
+    const endpoint = API.getUrl(device, 'LOAD_LIGHTS_FOR_BRIDGE')
+
+    return {
+        type: 'LOAD_LIGHTS_FOR_BRIDGE',
+        payload: {
+            promise: axios.get(`${endpoint}`),
+            data: {
+                device
+            }
         }
     }
 }

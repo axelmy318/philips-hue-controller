@@ -1,21 +1,11 @@
 'use strict';
 
 // Import parts of electron to use
-const {
-  app, 
-  BrowserWindow,
-  ipcMain,
-} = require('electron');
-
+const { app, BrowserWindow, ipcMain } = require('electron');
 const axios = require('axios')
-
-const findIps = require('./findIps')
-
 const path = require('path')
 const url = require('url')
-
 const storage = require('electron-json-storage')
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -29,8 +19,12 @@ if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1920, 
-    height: 1080, 
+    width: 1920,
+    height: 1080,
+    minWidth: 1250,
+    minHeight: 600,
+    maxWidth: 1920,
+    maxHeight: 1080,
     show: false,
     webPreferences: {
       nodeIntegration: true,
