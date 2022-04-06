@@ -20,6 +20,15 @@ export const getBridgeUsername = (device, name) => {
     }
 }
 
+export const scanNetworkForBridges = () => {
+    return {
+        type: 'SCAN_NETWORK_FOR_BRIDGES',
+        payload: {
+            promise: axios.get(`https://discovery.meethue.com`) 
+        }
+    }
+}
+
 export const validateBridgeConnection = device => {
     const endpoint = API.getUrl(device, 'VALIDATE_BRIDGE_CONNECTION')
 

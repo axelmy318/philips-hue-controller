@@ -59,6 +59,20 @@ body {
   margin-right: 10px;
 }
 
-.bridge-connection-process {
-  margin-top: 40px;
+.menu-title {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.bridge-card-info-table tr td:first-child {
+  padding-right: 15px;
+}
+
+.main-app-content {
+  padding-top: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 90vh;
 }

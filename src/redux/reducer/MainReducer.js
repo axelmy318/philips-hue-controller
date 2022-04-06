@@ -5,9 +5,13 @@ const initialState = {
     loadedFromLocalStorage: false,
     bridgesConnexions: {
         success: {},
-        errors: {}
+        errors: {},
+        pending: {
+            isLoaded: Status.None, 
+            content: {}
+        }
     },
-    bridges: {} 
+    bridges: {},
 }
 
 const MainReducer = (state = initialState, action) => {
@@ -45,7 +49,7 @@ const MainReducer = (state = initialState, action) => {
             bridge = state.bridgesConnexions.success[action.payload.id]
             delete state.bridgesConnexions.success[action.payload.id]
 
-            state.bridges[bridge.id] = {...bridge, name: action.payload.name}
+            state.bridges[bridge.id] = {...bridge, customName: action.payload.name, validConnection: true}
               
             ipcRenderer.invoke('SAVE_TO_STORAGE', {
                 key: 'main',
@@ -102,13 +106,29 @@ const MainReducer = (state = initialState, action) => {
                 state.bridges[id].lights = action.payload.promise.data
             }
 
-            console.log(state)
-
             return {...state}
         case 'LOAD_LIGHTS_FOR_BRIDGE_REJECTED':
             id = action.payload.data.device.id
             if(state.bridges[id])
                 state.bridges[id].loadLights = Status.Rejected
+
+            return {...state}
+        case 'SCAN_NETWORK_FOR_BRIDGES_PENDING':
+            state.bridgesConnexions.pending.isLoaded = Status.Pending
+            state.bridgesConnexions.pending.content = {}
+
+            return {...state}
+        case 'SCAN_NETWORK_FOR_BRIDGES_FULFILLED':
+            state.bridgesConnexions.pending.isLoaded = Status.Fulfilled
+
+             action.payload.promise.data.map((bridge) => {
+                if(!state.bridges[bridge.id])
+                    state.bridgesConnexions.pending.content[bridge.id] = bridge
+             })
+
+            return {...state}
+        case 'SCAN_NETWORK_FOR_BRIDGES_REJECTED':
+            state.bridgesConnexions.pending.isLoaded = Status.Rejected
 
             return {...state}
         case 'EMPTY_BRIDGES':

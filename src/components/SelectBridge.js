@@ -1,59 +1,56 @@
 import React, { useState } from 'react';
 import { ipcRenderer } from 'electron';
 import HueBridge from '../assets/img/hue-bridge.jpg'
+import { useDispatch, useSelector } from 'react-redux';
+import { scanNetworkForBridges } from '../redux/actions/Main';
+import { Status } from '../classes/Status';
+import BridgeConnectionProcess from './BridgeConnectionProcess';
 
-const SelectBridge = ({ selectedDevice, setSelectedDevice }) => {
-  const [ deviceList, setDeviceList ] = useState({isLoaded: false, content: [], error: null})
+const SelectBridge = ({ selectedDevice, setSelectedDevice, addSelectedDevice, removeSelectedDevice }) => {
+  //const [ deviceList, setDeviceList ] = useState({isLoaded: false, content: [], error: null})
   //const [ deviceList, setDeviceList ] = useState({isLoaded:true,content:[{id: '001788fffe2048f4', internalipaddress:"192.168.22.50"},{internalipaddress:"192.168.22.56",id:"001788fffe20455d"}],error:null})
   
-  const loadDeviceList = () => {
-    setDeviceList({isLoaded: 'pending', content: [], error: null})
+  const deviceList = useSelector(API => API.Main.bridgesConnexions)
+  const dispatch = useDispatch()
 
-    ipcRenderer.invoke('GET_LOCAL_DEVICES', 'ping').then((result) => setDeviceList({isLoaded: true, content: result, error: null}))
+  const loadDeviceList = () => {
+    dispatch(scanNetworkForBridges())
+    //setDeviceList({isLoaded: 'pending', content: [], error: null})
+    //ipcRenderer.invoke('GET_LOCAL_DEVICES', 'ping').then((result) => setDeviceList({isLoaded: true, content: result}))
   }
 
-  if(!deviceList.isLoaded)
+  if(deviceList.pending.isLoaded === Status.None)
     loadDeviceList()
 
   return (<>
-    <div>
-      <p className='text-big'>To get started, find your <i>HUE Bridge</i> in the list below.</p>
-      <div className='device-list'>
-        <div className='row align-items-center'>
-          <div className='device-list-viewport'>
-            <div className='col md-6'>
-              { deviceList.content.length > 0 ? <><div className='row align-items-center row-cols-1 row-cols-md-2 g-1'>{
-                  deviceList.content.map((device, index) => <div key={index} className='col'>
-                    <div className="card">
-                    <img src={HueBridge} className="card-img-top" alt="..." />
-                      <div className="card-body">
-                        <h5 className="card-title">HUE Bridge</h5>
-                        {device.id && <p className="card-text"># ID<br /> {device.id}</p>}
-                        {device.internalipaddress && <p className="card-text">IP address<br /> {device.internalipaddress}</p>}
-                        {device.id && <p className="card-text">MAC address<br /> {(device.id.slice(0, 6)+device.id.slice(10, device.id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</p>}
-                        <button className="btn btn-primary" onClick={() => setSelectedDevice(device)}>Select</button>
-                      </div>
-                    </div>
-                  </div>
-                  )
-                }</div></>
-                :
-                <>
-                  We couldn't find any HUE Bridge in your network. <br />Make sure you are connected to the same network as your HUE Bridges
-                </>
-              }
+  
+    <div className='row align-items-center row-cols-1 row-cols-md-3 g-4 m-3'>
+      {(Object.keys(deviceList.pending.content)).map((device, index) => 
+        <div key={index}>
+          <div className="card" style={{minHeight: '145px'}}>
+            <div className="row g-0">
+              <div className="col-md-4">
+                <img src={HueBridge} className="img-fluid rounded-start" alt="HUE Bridge" />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                { selectedDevice[device] === undefined
+                  ? <><table className='bridge-card-info-table'>
+                      <tr>{deviceList.pending.content[device].id && <><td className="card-text">ID </td><td>{deviceList.pending.content[device].id}</td></>}</tr>
+                      <tr>{deviceList.pending.content[device].internalipaddress && <><td className="card-text">IP </td><td>{deviceList.pending.content[device].internalipaddress}</td></>}</tr>
+                      <tr>{deviceList.pending.content[device].id && <><td className="card-text">MAC </td><td>{(deviceList.pending.content[device].id.slice(0, 6)+deviceList.pending.content[device].id.slice(10, deviceList.pending.content[device].id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
+                  </table>
+                  <button className="btn btn-sm btn-primary" onClick={() => addSelectedDevice(deviceList.pending.content[device])}>Select</button>
+                  </>
+                  : <BridgeConnectionProcess loadDeviceList={loadDeviceList} selectedDevice={selectedDevice[device]} setSelectedDevice={() => removeSelectedDevice(device)} />
+                  }
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      { deviceList.isLoaded !== 'pending' ?
-        <a className='clickable' onClick={() => loadDeviceList()}>{deviceList.isLoaded === true ? 'Re-scan network for HUE Bridges' : 'Scan network for HUE Bridges'}</a>
-        :
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      }
+        </div>)}
       </div>
-    </div>
+      <p className='link clickable' onClick={loadDeviceList} style={{color: 'skyblue'}}>Re-scan network for bridges</p>
     </>
   )
 };

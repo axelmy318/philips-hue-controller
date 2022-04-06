@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
+import { MdOutlineRouter as LogoBridge } from 'react-icons/md'
+import { FaRegLightbulb as LogoLighting} from 'react-icons/fa'
+import { GoSettings as LogoPreset } from 'react-icons/go'
 import { useDispatch, useSelector } from 'react-redux'
 import { Status } from '../classes/Status'
 import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/Main'
 import BridgeList from './BridgeList'
 import Sidebar from './Sidebar'
+import MenuHeader from './MenuHeader'
 
 const Dashboard = () => {
     const main = useSelector(API => API.Main)
@@ -14,19 +18,19 @@ const Dashboard = () => {
     const menus = {
       bridges: {
         id: "bridges",
-        icon: null,
+        icon: <LogoBridge />,
         name: 'Bridges',
         component: <BridgeList />
       },
       lighting: {
         id: "lighting",
-        icon: null,
+        icon: <LogoLighting />,
         name: 'Lighting',
         component: null
       },
       presets: {
         id: "presets",
-        icon: null,
+        icon: <LogoPreset />,
         name: 'Presets',
         component: null
       },
@@ -59,11 +63,20 @@ const Dashboard = () => {
       <div className='container-fluid p-0'>
         <main>
           <div className='row w-100'>
-            <div className='col-2'>
+            <div className='col-2 p-0'>
               <Sidebar selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} menus={menus} />
             </div>
-            <div className='col-10'>
-              {menus[selectedMenu].component}
+            <div className='col-10 p-0'>
+              <div className='row'>
+                <div className='col bg-dark text-white'>
+                  <MenuHeader header={menus[selectedMenu].name} />
+                </div>
+              </div>
+              <div className='row main-app-content'>
+                <div className='col'>
+                  {menus[selectedMenu].component}
+                </div>
+              </div>
             </div>
           </div>
           </main>

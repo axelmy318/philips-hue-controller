@@ -26,11 +26,11 @@ const PhilipsHUEController = () => {
             <LoadingScreen />
         }
 
-        { main.loadedFromLocalStorage && Object.keys(main.bridges).length <= 0 &&
+        {/* main.loadedFromLocalStorage && Object.keys(main.bridges).length <= 0 &&
             <GetStarted />
-        }
+        */}
 
-        { main.loadedFromLocalStorage && Object.keys(main.bridges).length > 0 &&
+        { main.loadedFromLocalStorage &&
             <Dashboard />
         }
         </>

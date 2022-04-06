@@ -1,7 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { emptyBridges } from '../redux/actions/Main'
+import { emptyBridges, scanNetworkForBridges } from '../redux/actions/Main'
 import BridgeItem from './BridgeItem'
+import ConnectBridge from './ConnectBridge'
 
 const BridgeList = () => {
     const dispatch = useDispatch()
@@ -10,26 +11,32 @@ const BridgeList = () => {
 
     const handleEmptyBridges = () => {
       dispatch(emptyBridges())
+      dispatch(scanNetworkForBridges())
     }
 
     return (
-        <>
-            <h1>Dashboard</h1>
-
-            { Object.keys(bridges).map((key, index) => <div key={index}>
-              <BridgeItem />
-              <div className="card" style={{width: '48%'}}>
-                <div className="card-body">
-                  <h5 className="card-title">{bridges[key].name}</h5>
-                  {bridges[key].id && <p className="card-text"># ID<br /> {bridges[key].id}</p>}
-                  {bridges[key].internalipaddress && <p className="card-text">IP address<br /> {bridges[key].internalipaddress}</p>}
-                  {bridges[key].username && <p className="card-text">username<br /> {bridges[key].username}</p>}
+      <>
+      <div className='container'>
+        <h2>Connect a new bridge</h2>
+        <ConnectBridge />
+        <h2>My bridges</h2>
+        { Object.keys(bridges).length <= 0 
+          ?
+            <>
+              <p>No bridges... You can add above</p>
+            </>
+          :
+          <>
+          <div className='row align-items-center row-cols-1 row-cols-md-3 g-4 m-3'>
+              { Object.keys(bridges).map((key, index) => <div key={index}>
+                  <BridgeItem device={bridges[key]} />
                 </div>
-              </div>
-              <button className='btn btn-danger' onClick={handleEmptyBridges}>Empty bridges record</button>
-              </div>)
-
-            }
+              )}
+            </div>
+            <button className='btn btn-danger' onClick={handleEmptyBridges}>Empty</button>
+          </>
+        }
+        </div>
         </>
     )
 }
