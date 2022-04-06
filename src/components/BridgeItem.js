@@ -12,9 +12,11 @@ const BridgeItem = ({ device }) => {
                     <div className="card-body">
                         <h5 className="card-title">{device.customName}</h5>
                         <table className='bridge-card-info-table'>
-                            <tr>{device.id && <><td className="card-text">ID </td><td>{device.id}</td></>}</tr>
-                            <tr>{device.internalipaddress && <><td className="card-text">IP </td><td>{device.internalipaddress}</td></>}</tr>
-                            <tr>{device.id && <><td className="card-text">MAC </td><td>{(device.id.slice(0, 6)+device.id.slice(10, device.id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
+                            <tbody>
+                                <tr>{device.id && <><td className="card-text">ID </td><td>{device.id}</td></>}</tr>
+                                <tr>{device.internalipaddress && <><td className="card-text">IP </td><td>{device.internalipaddress}</td></>}</tr>
+                                <tr>{device.id && <><td className="card-text">MAC </td><td>{(device.id.slice(0, 6)+device.id.slice(10, device.id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
+                            </tbody>
                         </table>
                         { device.validConnection
                         ? <p className="card-text"><small className="text-success">Connected</small></p>

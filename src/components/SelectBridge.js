@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { ipcRenderer } from 'electron';
+import React from 'react';
 import HueBridge from '../assets/img/hue-bridge.jpg'
 import { useDispatch, useSelector } from 'react-redux';
 import { scanNetworkForBridges } from '../redux/actions/Main';
@@ -36,9 +35,11 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice, addSelectedDevice, re
                 <div className="card-body">
                 { selectedDevice[device] === undefined
                   ? <><table className='bridge-card-info-table'>
-                      <tr>{deviceList.pending.content[device].id && <><td className="card-text">ID </td><td>{deviceList.pending.content[device].id}</td></>}</tr>
-                      <tr>{deviceList.pending.content[device].internalipaddress && <><td className="card-text">IP </td><td>{deviceList.pending.content[device].internalipaddress}</td></>}</tr>
-                      <tr>{deviceList.pending.content[device].id && <><td className="card-text">MAC </td><td>{(deviceList.pending.content[device].id.slice(0, 6)+deviceList.pending.content[device].id.slice(10, deviceList.pending.content[device].id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
+                      <tbody>
+                        <tr>{deviceList.pending.content[device].id && <><td className="card-text">ID </td><td>{deviceList.pending.content[device].id}</td></>}</tr>
+                        <tr>{deviceList.pending.content[device].internalipaddress && <><td className="card-text">IP </td><td>{deviceList.pending.content[device].internalipaddress}</td></>}</tr>
+                        <tr>{deviceList.pending.content[device].id && <><td className="card-text">MAC </td><td>{(deviceList.pending.content[device].id.slice(0, 6)+deviceList.pending.content[device].id.slice(10, deviceList.pending.content[device].id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
+                      </tbody>
                   </table>
                   <button className="btn btn-sm btn-primary" onClick={() => addSelectedDevice(deviceList.pending.content[device])}>Select</button>
                   </>

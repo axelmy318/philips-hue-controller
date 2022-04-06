@@ -32,6 +32,9 @@ const BridgeList = () => {
                   <BridgeItem device={bridges[key]} />
                 </div>
               )}
+
+              
+            {console.log(bridges)}
             </div>
             <button className='btn btn-danger' onClick={handleEmptyBridges}>Empty</button>
           </>
