@@ -28,7 +28,6 @@ const BridgeList = () => {
                 </div>
               )}
             </div>
-            <button className='btn btn-danger' onClick={handleEmptyBridges}>Empty</button>
           </>
         }
         </div>

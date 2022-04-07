@@ -6,7 +6,7 @@ const LightingBridge = ({ device }) => {
 
     return (
         <div className="card">
-            <div className="card-header clickable" onClick={() => setOpen(!open)}>
+            <div className="card-header light-control-bridge-title clickable" onClick={() => setOpen(!open)}>
                 {device.customName}
             </div>
             {open && <> 

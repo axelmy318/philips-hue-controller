@@ -44,17 +44,14 @@ const LightControl = ({ device, light }) => {
       }))
     }
 
-
-    const iconColor = light.state.on ? 'cyan' : 'grey'
-
     return (
       <div className="card w-100 mb-2">
           <div className="card-body">
             <div className='row align-items-center'>
               <div className='col col-md-1' align="center">
-                <IconContext.Provider value={{color: iconColor, size: '75%'}}>
+                <IconContext.Provider value={{color: light.state.on ? `hsl(${Math.round(hue.h)}, ${Math.round(hue.s*100)}%, ${Math.round(hue.v*100/2)}%)` : 'grey', size: '75%'}}>
                   <LogoLightBulb />
-                  <div className="form-check form-switch" align="center">
+                  <div className="form-check form-switch custom-switch-lg" align="center" style={{heigth: '50px', width: '100px'}}>
                     <input className="form-check-input input-lg" checked={light.state.on} ref={lightCheckedRef} onChange={handleLightOnOff} type="checkbox" role="switch" id="flexSwitchCheckDefault" />
                   </div>
                 </IconContext.Provider>
@@ -65,10 +62,17 @@ const LightControl = ({ device, light }) => {
                 <a href="#" className="btn btn-primary">Button</a>
               </div>
               <div className='col col-md-6'>
-                {/*<HsvColorPicker color={hue} onChange={(value) => {console.log(value);setHue(value)}} onMouseLeave={(e)=>handleChangeLightsColor(hue)} onMouseUp={(e)=>handleChangeLightsColor(hue)} />*/}
-                HUE <HuePicker color={{h: hue.h, s: 1, v: 1}} onChangeComplete={(value) => {console.log(value); changeHSV('h', value.hsv.h)}} />
-                SAT<AlphaPicker color={{h: hue.h, s: 1, v: 1, a: hue.s}} onChangeComplete={(value) => {console.log(value); changeHSV('s', value.hsv.a)}} />
-                BRI <AlphaPicker color={{h: 360, s: 1, v: 1, a: hue.v}} onChangeComplete={(value) => {console.log(value); changeHSV('v', value.hsv.a)}} />
+                <div className='row'>
+                  <div className='col'>
+                    <table>
+                      <tbody>
+                        <tr><td>HUE</td><td><HuePicker color={{h: hue.h, s: 1, v: 1}} onChangeComplete={(value) => {changeHSV('h', value.hsv.h)}} /></td></tr>
+                        <tr><td>Saturation</td><td><AlphaPicker color={{h: hue.h, s: 1, v: 1, a: hue.s}} onChangeComplete={(value) => {changeHSV('s', value.hsv.a)}} /></td></tr>
+                        <tr><td>Brightness</td><td><AlphaPicker color={{h: hue.h, s: hue.s, v: 1, a: hue.v}} onChangeComplete={(value) => {changeHSV('v', value.hsv.a)}} /></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
