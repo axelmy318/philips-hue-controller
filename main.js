@@ -49,6 +49,7 @@ function createWindow() {
       slashes: true
     });
   }
+  console.log(indexPath)
   mainWindow.loadURL( indexPath );
 
   // Don't show until we are ready and loaded

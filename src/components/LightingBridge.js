@@ -1,20 +1,19 @@
 import React, { useState } from 'react'
 import LightControl from './LightControl'
 
-const LightingBridge = ({ device }) => {
+const LightingBridge = ({ device, group }) => {
     const [ open, setOpen ] = useState(true)
 
     return (
         <div className="card">
             <div className="card-header light-control-bridge-title clickable" onClick={() => setOpen(!open)}>
-                {device.customName}
+                {group.name}
             </div>
             {open && <> 
                 <div className="card-body">
-                    { Object.keys(device.lights).map((light, index) => <React.Fragment key={index}>
-                        <LightControl device={device} light={device.lights[light]} />
-                    </React.Fragment>)
-
+                    { group.lights.map((light) => <React.Fragment key={light}>
+                            <LightControl device={device} light={device.lights[light]} />
+                        </React.Fragment>)
                     }
                 </div>
             </>}

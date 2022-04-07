@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import { MdOutlineRouter as LogoBridge } from 'react-icons/md'
-import { FaRegLightbulb as LogoLighting} from 'react-icons/fa'
-import { GoSettings as LogoPreset } from 'react-icons/go'
+import { RiLandscapeLine as LogoScenes } from 'react-icons/ri'
+import { GoSettings as LogoControls } from 'react-icons/go'
 import { useDispatch, useSelector } from 'react-redux'
 import { Status } from '../classes/Status'
 import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/Main'
@@ -23,16 +23,16 @@ const Dashboard = () => {
         name: 'Bridges',
         component: <BridgeList />
       },
-      lighting: {
-        id: "lighting",
-        icon: <LogoLighting />,
-        name: 'Lighting',
+      controls: {
+        id: "controls",
+        icon: <LogoControls />,
+        name: 'Controls',
         component: <LightingPage />
       },
-      presets: {
-        id: "presets",
-        icon: <LogoPreset />,
-        name: 'Presets',
+      scenes: {
+        id: "scenes",
+        icon: <LogoScenes />,
+        name: 'Scenes',
         component: null
       },
     }

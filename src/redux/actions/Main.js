@@ -57,7 +57,7 @@ export const scanNetworkForBridges = () => {
 }
 
 export const validateBridgeConnection = device => {
-    const endpoint = API.getUrl(device, 'VALIDATE_BRIDGE_CONNECTION')
+    const endpoint = API.getUrl(device, 'LOAD_BRIDGE_DATA')
 
     return {
         type: 'VALIDATE_BRIDGE_CONNECTION',
