@@ -62,9 +62,11 @@ const BridgeConnectionProcess = ({ loadDeviceList, selectedDevice, setSelectedDe
             <div>
                 { !started && 
                     <>
-                    <input value={name} onChange={(e) => setName(e.target.value)} className="form-control form-control-sm" type="text" placeholder="Name your HUE bridge" />
-                    <button className='btn btn-sm btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>&nbsp;
-                    <button className='btn btn-sm btn-success mt-4' disabled={!(name !== "")} onClick={() => setStarted(true)}>Start</button>
+                        <input value={name} onChange={(e) => setName(e.target.value)} className="form-control form-control-sm" type="text" placeholder="Name your HUE bridge" />
+                
+                        <button className='btn btn-sm btn-secondary mt-2' onClick={goBackToSelectionMenu}>Cancel</button>&nbsp;
+                        <button className='btn btn-sm btn-success mt-2' disabled={!(name !== "")} onClick={() => setStarted(true)}>Start</button>
+                  
                     </>
                 }
                 { started && timeRemaining >= 0 && APIData === null && hasToPressButton &&
@@ -88,13 +90,14 @@ const BridgeConnectionProcess = ({ loadDeviceList, selectedDevice, setSelectedDe
                 { started && timeRemaining <= 0 && APIData === null &&
                     <>
                     <p className='m-0 p-0'>The link button was not pressed in time.</p>
-                    <button className='btn btn-sm btn-danger mt-4' onClick={goBackToSelectionMenu}>Go back</button>
+                    <button className='btn btn-sm btn-secondary mt-4' onClick={goBackToSelectionMenu}>Cancel</button>&nbsp;
+                    <button className='btn btn-sm btn-primary mt-4' onClick={() => setTimeRemaining(MAX_TIME)}>Retry</button>
                     </>
                 }
                 { started && APIData !== null &&
                     <>
                     <p className='m-0 p-0'>The HUE bridge successfully connected.</p>
-                    <button className='btn btn-sm btn-primary mt-4' onClick={handleApproveBridge}>Next</button>
+                    <button className='btn btn-sm btn-primary mt-4' onClick={handleApproveBridge}>Add to my list</button>
                     </>
                 }
             </div>

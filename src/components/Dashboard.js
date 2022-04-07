@@ -9,6 +9,7 @@ import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/
 import BridgeList from './BridgeList'
 import Sidebar from './Sidebar'
 import MenuHeader from './MenuHeader'
+import LightingPage from './LightingPage'
 
 const Dashboard = () => {
     const main = useSelector(API => API.Main)
@@ -26,7 +27,7 @@ const Dashboard = () => {
         id: "lighting",
         icon: <LogoLighting />,
         name: 'Lighting',
-        component: null
+        component: <LightingPage />
       },
       presets: {
         id: "presets",

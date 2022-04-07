@@ -76,3 +76,13 @@ body {
   overflow-y: scroll;
   max-height: 90vh;
 }
+
+.card-bridge-connection {
+  position: relative;
+}
+
+.card-body-connecting-steps {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}

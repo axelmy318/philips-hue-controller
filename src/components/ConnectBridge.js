@@ -13,7 +13,6 @@ const ConnectBridge = () => {
 
     const removeSelectedDevice = (device) => {
         const tmpSelectedDevice = selectedDevice
-        console.log(device)
         delete tmpSelectedDevice[device]        
         setSelectedDevice({...tmpSelectedDevice})
     }

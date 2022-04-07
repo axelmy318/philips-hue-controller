@@ -26,7 +26,8 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice, addSelectedDevice, re
     <div className='row align-items-center row-cols-1 row-cols-md-3 g-4 m-3'>
       {(Object.keys(deviceList.pending.content)).map((device, index) => 
         <div key={index}>
-          <div className="card" style={{minHeight: '145px'}}>
+          <div className="card card-bridge-connection" style={{minHeight: '145px'}}>
+          { selectedDevice[device] === undefined ?
             <div className="row g-0">
               <div className="col-md-4">
                 <img src={HueBridge} className="img-fluid rounded-start" alt="HUE Bridge" />
@@ -41,13 +42,22 @@ const SelectBridge = ({ selectedDevice, setSelectedDevice, addSelectedDevice, re
                         <tr>{deviceList.pending.content[device].id && <><td className="card-text">MAC </td><td>{(deviceList.pending.content[device].id.slice(0, 6)+deviceList.pending.content[device].id.slice(10, deviceList.pending.content[device].id.length)).replace(/(.{2})/g,"$1:").slice(0, -1)}</td></>}</tr>
                       </tbody>
                   </table>
-                  <button className="btn btn-sm btn-primary" onClick={() => addSelectedDevice(deviceList.pending.content[device])}>Select</button>
+                  <button className="btn btn-sm btn-primary" onClick={() => addSelectedDevice(deviceList.pending.content[device])}>Connect</button>
                   </>
                   : <BridgeConnectionProcess loadDeviceList={loadDeviceList} selectedDevice={selectedDevice[device]} setSelectedDevice={() => removeSelectedDevice(device)} />
                   }
                 </div>
               </div>
             </div>
+            :
+            <div className="row g-0">
+              <div className="col-md-12 align-self-center">
+                <div className="card-body">
+                  <BridgeConnectionProcess loadDeviceList={loadDeviceList} selectedDevice={selectedDevice[device]} setSelectedDevice={() => removeSelectedDevice(device)} />
+                </div>
+              </div>
+            </div>
+            }
           </div>
         </div>)}
       </div>

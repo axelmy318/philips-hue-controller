@@ -16,7 +16,7 @@ const initialState = {
 
 const MainReducer = (state = initialState, action) => {
     action = action.action ? action.action : action 
-    let data, bridge, id
+    let data, bridge, id, lightId
 
     switch(action.type) {
         case 'GET_BRIDGE_USERNAME_PENDING':
@@ -49,8 +49,23 @@ const MainReducer = (state = initialState, action) => {
             bridge = state.bridgesConnexions.success[action.payload.id]
             delete state.bridgesConnexions.success[action.payload.id]
 
-            state.bridges[bridge.id] = {...bridge, customName: action.payload.name, validConnection: true}
+            state.bridges[bridge.id] = {
+                ...bridge, 
+                customName: 
+                action.payload.name, 
+                validConnection: Status.Fulfilled,
+                lightsLoaded: Status.None
+            }
               
+            ipcRenderer.invoke('SAVE_TO_STORAGE', {
+                key: 'main',
+                data: state.bridges
+            })
+
+            return {...state}
+        case 'REMOVE_BRIDGE':
+            delete state.bridges[action.payload.data.device.id]
+
             ipcRenderer.invoke('SAVE_TO_STORAGE', {
                 key: 'main',
                 data: state.bridges
@@ -93,10 +108,43 @@ const MainReducer = (state = initialState, action) => {
                 state.bridges[id].validConnection = Status.Rejected
             
             return {...state}
+        case 'CHANGE_LIGHT_STATE_PENDING':
+            lightId = action.payload.light.id
+            id = action.payload.device.id
+
+            if(state.bridges[id] && state.bridges[id].lights[lightId]) {
+                state.bridges[id].lights[lightId].isLoaded = Status.Fulfilled
+            }
+
+            return {...state}
+        case 'CHANGE_LIGHT_STATE_FULFILLED':
+            lightId = action.payload.data.light.id
+            id = action.payload.data.device.id
+
+            if(state.bridges[id] && state.bridges[id].lights[lightId]) {
+                state.bridges[id].lights[lightId].isLoaded = Status.None
+            }
+
+            return {...state}
+        case 'CHANGE_LIGHT_STATE_REJECTED':
+            lightId = action.payload.data.light.id
+            id = action.payload.data.device.id
+
+            if(state.bridges[id] && state.bridges[id].lights[lightId]) {
+                state.bridges[id].lights[lightId].isLoaded = Status.Rejected
+            }
+
+            return {...state}
         case 'LOAD_LIGHTS_FOR_BRIDGE_PENDING':
             id = action.payload.device.id
-            if(state.bridges[id])
+            if(state.bridges[id]){
                 state.bridges[id].loadLights = Status.Pending
+                if(state.bridges[id].lights)
+                    Object.keys(state.bridges[id].lights).map(light => state.bridges[id].lights[light] = {
+                        ...state.bridges[id].lights[light],
+                        isLoaded: Status.Pending
+                    })
+            }
 
             return {...state}
         case 'LOAD_LIGHTS_FOR_BRIDGE_FULFILLED':
@@ -104,6 +152,11 @@ const MainReducer = (state = initialState, action) => {
             if(state.bridges[id]){
                 state.bridges[id].lightsLoaded = Status.Fulfilled
                 state.bridges[id].lights = action.payload.promise.data
+                Object.keys(action.payload.promise.data).map(light => state.bridges[id].lights[light] = {
+                    ...action.payload.promise.data[light],
+                    id: light,
+                    isLoaded: Status.Fulfilled
+                })
             }
 
             return {...state}

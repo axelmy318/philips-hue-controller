@@ -20,6 +20,33 @@ export const getBridgeUsername = (device, name) => {
     }
 }
 
+export const switchLightState = (device, light, newState) => {
+    const endpoint = API.getUrl({...device, lightId: light.id}, 'CHANGE_LIGHT_STATE')
+
+    return {
+        type: 'CHANGE_LIGHT_STATE',
+        payload: {
+            promise: axios.put(`${endpoint}`, JSON.stringify(newState), {headersJSON}),
+            data: {
+                device,
+                light,
+                newState
+            }
+        }
+    }
+}
+
+export const removeBridge = device => {
+    return {
+        type: 'REMOVE_BRIDGE',
+        payload: {
+            data: {
+                device
+            }
+        }
+    }
+}
+
 export const scanNetworkForBridges = () => {
     return {
         type: 'SCAN_NETWORK_FOR_BRIDGES',
