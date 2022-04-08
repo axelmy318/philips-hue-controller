@@ -17,8 +17,12 @@ const PhilipsHUEController = () => {
             dispatch(loadMainFromStorage(result))
         })
     }
-
     
+    const checkForUpdates = () => {
+
+        const test = ipcRenderer.invoke('CHECK_FOR_UPDATES', {key: 'main'})
+        console.log(test)
+    }
 
     return (
         <>
@@ -29,7 +33,7 @@ const PhilipsHUEController = () => {
         {/* main.loadedFromLocalStorage && Object.keys(main.bridges).length <= 0 &&
             <GetStarted />
         */}
-
+<button onClick={() => checkForUpdates()}>update</button>
         { main.loadedFromLocalStorage &&
             <Dashboard />
         }

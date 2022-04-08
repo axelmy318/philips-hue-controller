@@ -28,7 +28,6 @@ const BridgeList = () => {
                 </div>
               )}
             </div>
-            {console.log(bridges)}
           </>
         }
         </div>

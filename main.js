@@ -1,11 +1,13 @@
 'use strict';
 
 // Import parts of electron to use
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, dialog, BrowserWindow, ipcMain } = require('electron');
 const axios = require('axios')
 const path = require('path')
 const url = require('url')
 const storage = require('electron-json-storage')
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -49,8 +51,14 @@ function createWindow() {
       slashes: true
     });
   }
-  console.log(indexPath)
+  
   mainWindow.loadURL( indexPath );
+
+  //Check for updates
+  //autoUpdater.setFeedURL('https://github.com/axelmy318/philips-hue-controller.git')
+  autoUpdater.logger = log
+  //autoUpdater.checkForUpdatesAndNotify()
+  
 
   // Don't show until we are ready and loaded
   mainWindow.once('ready-to-show', () => {
@@ -92,6 +100,22 @@ app.on('activate', () => {
   }
 });
 
+app.on('ready', function()  {
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
+ipcMain.handle('GET_APP_VERSION', async(event, arg) => {
+  //arg.callback(app.getVersion())
+  let result
+
+  await new Promise((resolve, reject) => {
+    resolve(app.getVersion())
+   }).then(response => result = response)
+
+  return app.getVersion()
+  //event.sender.send('app_version', { version: app.getVersion() });
+});
+
 ipcMain.handle('SAVE_TO_STORAGE', async(event, arg) => {
   const defaultDataPath = storage.getDefaultDataPath()
   
@@ -131,4 +155,73 @@ ipcMain.handle('GET_FROM_STORAGE', async(event, arg) => {
    }).then(response => result = response)
 
    return result
+})
+
+ipcMain.handle('CHECK_FOR_UPDATES', () => {
+  autoUpdater.checkForUpdatesAndNotify()
+})
+
+/*autoUpdater.on('update-available', () => {
+  mainWindow.webContents.send('update_available');
+});
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});*/
+
+autoUpdater.on("error", (error) => {
+  const dialogOpts = {
+  type: 'info',
+  buttons: ['Ok'],
+  title: 'Update available',
+  message: "dwda",
+  detail: error
+}
+dialog.showMessageBox(dialogOpts, (response) => {})
+})
+
+autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'Update available',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: 'Downloading update...'
+  }
+  dialog.showMessageBox(dialogOpts, (response) => {})
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+  const dialogOpts = {
+  type: 'info',
+  buttons: ['Ok'],
+  title: 'Update available',
+  message: "Philips HUE Controller",
+  detail: `Download speed: ${progressObj.bytesPerSecond} | Downloaded  ${progressObj.percent}%`
+}
+dialog.showMessageBox(dialogOpts, (response) => {})
+})
+
+autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Update downloaded',
+    message: process.platform === 'win32' ? releaseNotes: releaseName,
+    detail: 'The update has been downloaded. Restart the application to apply the update.'
+  }
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if(returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
+
+autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'Update downloaded',
+    message: process.platform === 'win32' ? releaseNotes: releaseName,
+    detail: 'No available update'
+  }
+  
+  dialog.showMessageBox(dialogOpts, (response) => {})
 })

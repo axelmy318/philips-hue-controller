@@ -18,7 +18,6 @@ const LightControl = ({ device, light }) => {
     })
 
     //let hue = { h: light.state.hue / 65536, s: light.state.sat / 254 * 100, v: light.state.bri / 254 * 100 }
-    console.log('HUE IS ', light.state,hue)
 
     if(light.isLoaded === Status.None) {
       dispatch(loadLightsForBridge(device))
