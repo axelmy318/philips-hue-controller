@@ -16,8 +16,8 @@
     "build": "webpack --config webpack.build.config.js",
     "package": "webpack --config webpack.build.config.js",
     "postpackage": "electron-packager ./ --out=./builds --overwrite",
-    "dist": "electron-builder --win --x64",
-    "distDeploy": "electron-builder --win --x64 --publish always",
+    "dist": "electron-builder --win --x64 --publish never",
+    "distDeploy": "electron-builder --win --x64 --publish always --config electron-builder.json",
     "packAndDist": "npm run package && npm run dist",
     "packAndDistDeploy": "npm run package && npm run distDeploy"
   },
@@ -30,25 +30,6 @@
       "sourceDirectory": null
     }
   },
-  "build": {
-    "appId": "com.axelmy318.philips-hue-controller",
-    "extends": null,
-    "productName": "Philips HUE Controller",
-    "target": "NSIS",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "*.js",
-      "build",
-      "dist",
-      "node_modules"
-    ],
-    "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
-    }
-  },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.16.11",
@@ -59,7 +40,9 @@
     "babel-preset-env": "7.0.0-beta.3",
     "babel-preset-react": "^7.0.0-beta.3",
     "babili-webpack-plugin": "^0.1.2",
+    "cross-var": "^1.1.0",
     "css-loader": "^0.28.11",
+    "dotenv-cli": "^5.1.0",
     "electron": "^11.5.0",
     "electron-builder": "^22.14.13",
     "electron-packager": "^15.4.0",

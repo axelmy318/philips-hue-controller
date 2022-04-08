@@ -1,0 +1,23 @@
+{
+  "appId": "com.axelmy318.philips-hue-controller",
+  "extends": null,
+  "productName": "Philips HUE Controller",
+  "target": "NSIS",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "*.js",
+    "build",
+    "dist",
+    "node_modules"
+  ],
+  "nsis": {
+    "allowToChangeInstallationDirectory": true,
+    "oneClick": false
+  },
+  "publish": {
+    "provider": "github",
+    "token": "YOUR_TOKEN_HERE"
+  }
+}
