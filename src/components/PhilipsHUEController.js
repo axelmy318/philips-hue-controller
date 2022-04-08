@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState} from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { loadMainFromStorage } from '../redux/actions/Main';
@@ -11,6 +11,7 @@ import LoadingScreen from './LoadingScreen';
 const PhilipsHUEController = () => {
     const main = useSelector(API => API.Main)
     const dispatch = useDispatch()
+    const [ buttonText, setButtonText ] = useState('Check for update') 
 
     if(!main.loadedFromLocalStorage){
         ipcRenderer.invoke('GET_FROM_STORAGE', {key: 'main'}).then((result) => {
@@ -19,9 +20,8 @@ const PhilipsHUEController = () => {
     }
     
     const checkForUpdates = () => {
-
-        const test = ipcRenderer.invoke('CHECK_FOR_UPDATES', {key: 'main'})
-        console.log(test)
+        ipcRenderer.send('CHECK_FOR_UPDATES', {key: 'main'})
+        ipcRenderer.on('UPDATE_DOWNLOADED', (event, arg) => setButtonText('Ready to install'))
     }
 
     return (
@@ -33,7 +33,7 @@ const PhilipsHUEController = () => {
         {/* main.loadedFromLocalStorage && Object.keys(main.bridges).length <= 0 &&
             <GetStarted />
         */}
-<button onClick={() => checkForUpdates()}>update</button>
+            <button onClick={() => checkForUpdates()}>{buttonText}</button>
         { main.loadedFromLocalStorage &&
             <Dashboard />
         }

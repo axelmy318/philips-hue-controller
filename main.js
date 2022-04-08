@@ -7,7 +7,7 @@ const path = require('path')
 const url = require('url')
 const storage = require('electron-json-storage')
 const { autoUpdater } = require('electron-updater');
-const log = require('electron-log')
+const log = require('electron-log');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -64,10 +64,12 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     // Open the DevTools automatically if developing
-    if ( dev ) {
+    //if ( dev ) {
       mainWindow.webContents.openDevTools();
-    }
+    //}
   });
+
+  
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -157,8 +159,13 @@ ipcMain.handle('GET_FROM_STORAGE', async(event, arg) => {
    return result
 })
 
-ipcMain.handle('CHECK_FOR_UPDATES', () => {
+ipcMain.on('CHECK_FOR_UPDATES', () => {
   autoUpdater.checkForUpdatesAndNotify()
+})
+
+ipcMain.on('CHECK_FOR_UPDATE_TEST', (event, ...args) => {
+  mainWindow.send('UPDATE_STATUS', {version: 'xddd'})
+  console.log({version: 'xxxddd'})
 })
 
 /*autoUpdater.on('update-available', () => {
@@ -179,6 +186,8 @@ autoUpdater.on("error", (error) => {
 dialog.showMessageBox(dialogOpts, (response) => {})
 })
 
+let progressDialog
+
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     const dialogOpts = {
     type: 'info',
@@ -187,18 +196,21 @@ autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
     message: process.platform === 'win32' ? releaseNotes : releaseName,
     detail: 'Downloading update...'
   }
-  dialog.showMessageBox(dialogOpts, (response) => {})
+  mainWindow.webContents.send('update-available')
+
+  progressDialog = dialog.showMessageBox(dialogOpts, (response) => {})
 })
 
 autoUpdater.on('download-progress', (progressObj) => {
   const dialogOpts = {
-  type: 'info',
-  buttons: ['Ok'],
-  title: 'Update available',
-  message: "Philips HUE Controller",
-  detail: `Download speed: ${progressObj.bytesPerSecond} | Downloaded  ${progressObj.percent}%`
-}
-dialog.showMessageBox(dialogOpts, (response) => {})
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'Update available',
+    message: "Philips HUE Controller",
+    detail: `Download speed: ${progressObj.bytesPerSecond} | Downloaded  ${progressObj.percent}%`
+  }
+  //mainWindow.send('download-progress', {progressObj})
+//dialog.showMessageBox(dialogOpts, (response) => {})
 })
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
@@ -209,19 +221,14 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     message: process.platform === 'win32' ? releaseNotes: releaseName,
     detail: 'The update has been downloaded. Restart the application to apply the update.'
   }
+
+  mainWindow.send('UPDATE_DOWNLOADED', {version: 'xddd'})
+
   dialog.showMessageBox(dialogOpts).then((returnValue) => {
     if(returnValue.response === 0) autoUpdater.quitAndInstall()
   })
 })
 
 autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'Update downloaded',
-    message: process.platform === 'win32' ? releaseNotes: releaseName,
-    detail: 'No available update'
-  }
-  
-  dialog.showMessageBox(dialogOpts, (response) => {})
+  mainWindow.webContents.send('update-available')
 })
