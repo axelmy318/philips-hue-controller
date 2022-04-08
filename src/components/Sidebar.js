@@ -13,8 +13,8 @@ const Sidebar = ({ selectedMenu, setSelectedMenu, menus }) => {
     }
 
     const getAppVersion = () => {
-        ipcRenderer.send('CHECK_FOR_UPDATE_TEST')
-        ipcRenderer.on('UPDATE_STATUS', (value, arg) => setVersion(arg.version))
+        /*ipcRenderer.send('CHECK_FOR_UPDATE_TEST')
+        ipcRenderer.on('UPDATE_STATUS', (value, arg) => setVersion(arg.version))*/
     }
     
     useEffect(() => {

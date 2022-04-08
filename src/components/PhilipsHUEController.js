@@ -20,10 +20,12 @@ const PhilipsHUEController = () => {
     }
     
     const checkForUpdates = () => {
-        ipcRenderer.send('CHECK_FOR_UPDATES', {key: 'main'})
-        ipcRenderer.on('UPDATE_DOWNLOADED', (event, arg) => setButtonText('Ready to install'))
+        ipcRenderer.send('CHECK_FOR_UPDATES')
+        //ipcRenderer.on('UPDATE_DOWNLOADED', (event, arg) => setButtonText('Ready to install'))
     }
-
+    
+    ipcRenderer.on('SET_UPDATE_STATUS', (event, arg) => console.log(arg))
+    
     return (
         <>
         { !main.loadedFromLocalStorage &&

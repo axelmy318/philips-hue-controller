@@ -160,6 +160,39 @@ ipcMain.handle('GET_FROM_STORAGE', async(event, arg) => {
 })
 
 ipcMain.on('CHECK_FOR_UPDATES', () => {
+  if( dev ) {
+    mainWindow.send('SET_UPDATE_STATUS', {status: 'UP_TO_DATE'})
+  } else {
+    autoUpdater.checkForUpdatesAndNotify()
+  }
+})
+
+autoUpdater.on('update-available', () => {
+  console.log('Update available')
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'DOWNLOADING_UPDATE', progress: 0})
+})
+
+autoUpdater.on('error', (err) => {
+  console.log('error', err)
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'ERROR'})
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+  console.log('download-progress', progressObj)
+  mainWindow.send('SET_UPDATE_STATE', {status: 'DOWNLOADING_UPDATE', progress: progressObj.percent})
+})
+
+autoUpdater.on('update-downloaded', () => {
+  console.log('update downloaded')
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_DOWNLOADED'})
+})
+
+autoUpdater.on('update-not-available', () => {
+  console.log('update not available')
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'UP_TO_DATE'})
+})
+
+/*ipcMain.on('CHECK_FOR_UPDATES', () => {
   autoUpdater.checkForUpdatesAndNotify()
 })
 
@@ -168,12 +201,12 @@ ipcMain.on('CHECK_FOR_UPDATE_TEST', (event, ...args) => {
   console.log({version: 'xxxddd'})
 })
 
-/*autoUpdater.on('update-available', () => {
+autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('update_available');
 });
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('update_downloaded');
-});*/
+});
 
 autoUpdater.on("error", (error) => {
   const dialogOpts = {
@@ -231,4 +264,4 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
 
 autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
   mainWindow.webContents.send('update-available')
-})
+})*/
