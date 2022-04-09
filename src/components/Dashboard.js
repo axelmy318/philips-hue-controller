@@ -10,6 +10,7 @@ import BridgeList from './BridgeList'
 import Sidebar from './Sidebar'
 import MenuHeader from './MenuHeader'
 import LightingPage from './LightingPage'
+import SettingsPage from './SettingsPage'
 
 const Dashboard = () => {
     const main = useSelector(API => API.Main)
@@ -35,9 +36,15 @@ const Dashboard = () => {
         name: 'Scenes',
         component: null
       },
+      settings: {
+        id: 'settings',
+        icon: null,
+        name: 'Scenes',
+        component: <SettingsPage />
+      }
     }
 
-    const [ selectedMenu, setSelectedMenu ] = useState(menus['bridges'].id)
+    const [ selectedMenu, setSelectedMenu ] = useState(menus['settings'].id)
 
     useEffect(() => {
       Object.keys(bridges).map(bridgeId => {

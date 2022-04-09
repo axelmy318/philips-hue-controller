@@ -102,9 +102,9 @@ app.on('activate', () => {
   }
 });
 
-app.on('ready', function()  {
+/*app.on('ready', function()  {
   autoUpdater.checkForUpdatesAndNotify();
-});
+});*/
 
 ipcMain.handle('GET_APP_VERSION', async(event, arg) => {
   //arg.callback(app.getVersion())
@@ -161,25 +161,33 @@ ipcMain.handle('GET_FROM_STORAGE', async(event, arg) => {
 
 ipcMain.on('CHECK_FOR_UPDATES', () => {
   if( dev ) {
-    mainWindow.send('SET_UPDATE_STATUS', {status: 'UP_TO_DATE'})
+    mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_NOT_AVAILABLE'})
   } else {
     autoUpdater.checkForUpdatesAndNotify()
   }
 })
 
+ipcMain.on('RESTART_AND_INSTALL_UPDATE', () => {
+  if( dev ) {
+    console.log('Restarting app to apply update')
+  } else {
+    autoUpdater.quitAndInstall()
+  }
+})
+
 autoUpdater.on('update-available', () => {
   console.log('Update available')
-  mainWindow.send('SET_UPDATE_STATUS', {status: 'DOWNLOADING_UPDATE', progress: 0})
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_AVAILABLE'})
 })
 
 autoUpdater.on('error', (err) => {
   console.log('error', err)
-  mainWindow.send('SET_UPDATE_STATUS', {status: 'ERROR'})
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'ERROR', error: err})
 })
 
 autoUpdater.on('download-progress', (progressObj) => {
   console.log('download-progress', progressObj)
-  mainWindow.send('SET_UPDATE_STATE', {status: 'DOWNLOADING_UPDATE', progress: progressObj.percent})
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_DOWNLOADING', progress: progressObj})
 })
 
 autoUpdater.on('update-downloaded', () => {
@@ -189,7 +197,7 @@ autoUpdater.on('update-downloaded', () => {
 
 autoUpdater.on('update-not-available', () => {
   console.log('update not available')
-  mainWindow.send('SET_UPDATE_STATUS', {status: 'UP_TO_DATE'})
+  mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_NOT_AVAILABLE'})
 })
 
 /*ipcMain.on('CHECK_FOR_UPDATES', () => {
