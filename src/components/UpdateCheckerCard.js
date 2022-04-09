@@ -35,32 +35,26 @@ const UpdateCheckerCard = () => {
 
     const getUpdateStatusText = () => {
         if(update.checkedForUpdate === Status.None){
-            console.log('test1')
             return UpdateStatus.NONE
         }
 
         if(update.checkedForUpdate === Status.Pending){
-            console.log('test2')
             return UpdateStatus.CHECKING_FOR_UPDATE
         }
 
         if(update.checkedForUpdate === Status.Fulfilled) {
             if(update.updateAvailable) {
                 if(update.updateDownloaded){
-                    console.log('test3')
                     return UpdateStatus.READY_TO_INSTALL
                 }
                 else if(update.updateDownloadProgress === null){
-                    console.log('test4')
                     return UpdateStatus.TRYING_TO_DOWNLOAD_APP
                 }
                 else {
-                    console.log('test5')
                     return UpdateStatus.DOWNLOADING_UPDATE
                 }
             }
             else if(!update.updateAvailable) {
-                console.log('test6')
                 return UpdateStatus.NO_UPDATES
             }
         }
@@ -79,45 +73,48 @@ const UpdateCheckerCard = () => {
         <div className="card border-secondary mb-3" style={{maxWidth: "18rem"}}>
             { status === UpdateStatus.NONE && <>
                 <div className="card-header">Updates</div>
-                    <div className="card-body text-secondary">
-                        <h5 className="card-title">Current version: {version}</h5>
-                        <button className='btn btn-outline-warning' onClick={checkForUpdates}>Check for update</button>
+                <div className="card-body text-secondary">
+                    <h5 className="card-title">Current version: {version}</h5>
+                    <button className='btn btn-outline-warning' onClick={checkForUpdates}>Check for update</button>
                 </div>
             </>}
 
             { status === UpdateStatus.CHECKING_FOR_UPDATE && <>
                 <div className="card-header">Updates</div>
-                    <div className="card-body text-secondary">
-                        <h5 className="card-title">Checking for update</h5>
+                <div className="card-body text-secondary">
+                    <h5 className="card-title">Checking for update</h5>
                 </div>
             </>}
 
             { status === UpdateStatus.NO_UPDATES && <>
                 <div className="card-header">Updates</div>
-                    <div className="card-body text-secondary">
-                        <h5 className="card-title">The app is up to date</h5>
+                <div className="card-body text-secondary">
+                    <h5 className="card-title">The app is up to date</h5>
                 </div>
             </>}
 
             { status === UpdateStatus.TRYING_TO_DOWNLOAD_APP && <>
                 <div className="card-header">Updates</div>
-                    <div className="card-body text-secondary">
-                        <h5 className="card-title">Contacting server...</h5>
+                <div className="card-body text-secondary">
+                    <h5 className="card-title">Contacting server...</h5>
                 </div>
             </>}
 
             { status === UpdateStatus.DOWNLOADING_UPDATE && <>
                 <div className="card-header">Updates</div>
                     <div className="card-body text-secondary">
-                        <h5 className="card-title">Downloading... {update.updateDownloadProgress.percent}</h5>
-                </div>
+                    <h5 className="card-title">Downloading... {Math.floor(update.updateDownloadProgress.percent)}%</h5>
+                    <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: `${Math.floor(update.updateDownloadProgress.percent)}%`}} aria-valuenow={Math.floor(update.updateDownloadProgress.percent)} aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    </div>
             </>}
 
             { status === UpdateStatus.READY_TO_INSTALL && <>
                 <div className="card-header">Updates</div>
-                    <div className="card-body text-secondary">
-                        <h5 className="card-title">Ready to install</h5>
-                        <button className='btn btn-outline-primary' onClick={restartApp}>Restart</button>
+                <div className="card-body text-secondary">
+                    <h5 className="card-title">Ready to install</h5>
+                    <button className='btn btn-outline-primary' onClick={restartApp}>Restart</button>
                 </div>
             </>}
         </div>

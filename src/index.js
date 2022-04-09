@@ -6,6 +6,7 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { createPromise } from './redux/middleware'
 import reducers from './redux/reducer'
 import { BrowserRouter as Router } from 'react-router-dom'
+import UpdateChecker from './components/UpdateChecker';
 
 let useReduxDevTools = false
 let composer
@@ -27,6 +28,7 @@ render(
         <Router>
             <Provider store={store} >
                 <App />
+                <UpdateChecker />
             </Provider>
         </Router>
     </React.StrictMode>

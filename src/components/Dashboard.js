@@ -39,12 +39,12 @@ const Dashboard = () => {
       settings: {
         id: 'settings',
         icon: null,
-        name: 'Scenes',
+        name: 'Settings',
         component: <SettingsPage />
       }
     }
 
-    const [ selectedMenu, setSelectedMenu ] = useState(menus['settings'].id)
+    const [ selectedMenu, setSelectedMenu ] = useState(menus['bridges'].id)
 
     useEffect(() => {
       Object.keys(bridges).map(bridgeId => {

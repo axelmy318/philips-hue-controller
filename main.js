@@ -64,9 +64,9 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
     // Open the DevTools automatically if developing
-    //if ( dev ) {
+    if ( dev ) {
       mainWindow.webContents.openDevTools();
-    //}
+    }
   });
 
   
@@ -163,6 +163,7 @@ ipcMain.on('CHECK_FOR_UPDATES', () => {
   if( dev ) {
     mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_NOT_AVAILABLE'})
   } else {
+    mainWindow.send('SET_UPDATE_STATUS', {status: 'CHECKING_FOR_UPDATE'})
     autoUpdater.checkForUpdatesAndNotify()
   }
 })
