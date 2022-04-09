@@ -25,7 +25,7 @@ const Sidebar = ({ selectedMenu, setSelectedMenu, menus }) => {
 
     return (
     <>
-        <div className="d-flex flex-column flex-shrink-0 p-5 text-white bg-dark" style={{height: '100vh'}}>
+        <div className="d-flex flex-column flex-shrink-0 p-5 text-white bg-primary" style={{height: '100vh'}}>
             <span className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <svg className="bi me-2" width="40" height="32"></svg>
             <span className="fs-4" onClick={() => getAppVersion()}>PHC {version} {updateAvailable ? 'AV' : 'NO'}</span>
