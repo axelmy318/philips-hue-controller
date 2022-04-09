@@ -1,6 +1,6 @@
 {
   "name": "philips-hue-controller",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Control your lights using this app",
   "author": "Axel Milliery",
   "homepage": "https://github.com/axelmy_318/philips-hue-controller",
