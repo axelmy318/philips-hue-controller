@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { MdOutlineRouter as LogoBridge } from 'react-icons/md'
 import { RiLandscapeLine as LogoScenes } from 'react-icons/ri'
 import { GoSettings as LogoControls } from 'react-icons/go'
+import { FiSettings as LogoSettings } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Status } from '../classes/Status'
 import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/Main'
@@ -38,7 +39,7 @@ const Dashboard = () => {
       },
       settings: {
         id: 'settings',
-        icon: null,
+        icon: <LogoSettings />,
         name: 'Settings',
         component: <SettingsPage />
       }

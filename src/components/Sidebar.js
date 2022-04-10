@@ -15,13 +15,17 @@ const Sidebar = ({ selectedMenu, setSelectedMenu, menus }) => {
     <>
         <div className="d-flex flex-column flex-shrink-0 p-0 pt-5 text-white bg-dark" style={{height: '100vh'}}>
             <span className="d-flex align-items-center text-white text-decoration-none">
-                <h2 style={{paddingLeft: '20%'}}>PHC</h2>
+                <h2 style={{paddingLeft: '20%'}}>HUE Controller</h2>
             </span>
             <hr />
-            <ul className="nav nav-pills flex-column mb-auto">
+            <ul className="nav nav-pills text-center flex-column mb-auto">
                 { Object.keys(menus).map((item, index) => <React.Fragment key={index}><li className={`nav-item`}>
-                        <div onClick={() => setSelectedMenu(item)} className={`text-125 text-center clickable pt-4 pb-4 text-white ${selectedMenu === item && 'active bg-info'}`}>
-                            {menus[item].icon} {menus[item].name}
+                        <div 
+                            onClick={() => setSelectedMenu(item)} 
+                            className={`text-150 clickable pt-4 pb-4 text-white ${selectedMenu === item && 'active bg-info'}`}
+                            
+                        >
+                            <span>{menus[item].icon} {menus[item].name}</span>
                         </div>
                     </li>
 
