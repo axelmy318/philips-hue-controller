@@ -9,7 +9,6 @@ const UpdateChecker = () => {
 
     useEffect(() => {
         const listener = (event, arg) => {
-            console.log('From MAIN: ', arg)
             dispatch(setUpdateSatus(arg.status, arg))
         }
 

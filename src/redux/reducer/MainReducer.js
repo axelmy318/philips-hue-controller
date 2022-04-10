@@ -53,7 +53,7 @@ const MainReducer = (state = initialState, action) => {
                 ...bridge, 
                 customName: 
                 action.payload.name, 
-                validConnection: Status.Fulfilled,
+                validConnection: Status.None,
                 lightsLoaded: Status.None
             }
               
@@ -120,7 +120,7 @@ const MainReducer = (state = initialState, action) => {
         case 'CHANGE_LIGHT_STATE_FULFILLED':
             lightId = action.payload.data.light.id
             id = action.payload.data.device.id
-
+            console.log('new state')
             if(state.bridges[id] && state.bridges[id].lights[lightId]) {
                 state.bridges[id].lights[lightId].isLoaded = Status.None
             }

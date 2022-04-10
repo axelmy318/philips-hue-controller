@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ipcRenderer } from 'electron'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Status } from '../classes/Status'
+import { setUpdateSatus } from '../redux/actions/Update'
 
 const UpdateCheckerCard = () => {
     const UpdateStatus = {
@@ -17,8 +18,7 @@ const UpdateCheckerCard = () => {
     const [ version, setVersion ] = useState(null)
 
     const update = useSelector(RED => RED.Update)
-
-    console.log(update)
+    const dispatch = useDispatch()
     
     const checkForUpdates = () => {
         ipcRenderer.send('CHECK_FOR_UPDATES')
@@ -30,6 +30,10 @@ const UpdateCheckerCard = () => {
 
     if(version === null) {
         ipcRenderer.invoke('GET_APP_VERSION', {}).then((response) => setVersion(response))
+    }
+
+    const resetStatus = () => {
+        dispatch(setUpdateSatus('RESET_UPDATE_STATUS', {}))
     }
 
     const getUpdateStatusText = () => {
@@ -62,11 +66,8 @@ const UpdateCheckerCard = () => {
     }
 
     useEffect(() => {
-        console.log(getUpdateStatusText())
         setStatus(getUpdateStatusText())
     }, [update])
-
-    console.log('Status', status)
 
     return (
         <div className="card border-secondary mb-3" style={{maxWidth: "18rem"}}>
@@ -89,6 +90,7 @@ const UpdateCheckerCard = () => {
                 <div className="card-header">Updates</div>
                 <div className="card-body text-secondary">
                     <h5 className="card-title">The app is up to date</h5>
+                    <button className='btn btn-outline-secondary' onClick={resetStatus}>Ok</button>
                 </div>
             </>}
 

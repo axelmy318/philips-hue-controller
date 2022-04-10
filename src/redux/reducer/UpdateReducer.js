@@ -13,6 +13,15 @@ const UpdateReducer = (state = initialState, action) => {
     let data, bridge, id, lightId
 
     switch(action.type) {
+        case 'RESET_UPDATE_STATUS':
+            return {
+                ...state,
+                checkedForUpdate: Status.None,
+                updateAvailable: false,
+                updateDownloadProgress: null,
+                updateDownloaded: false,
+                error: null,
+            }
         case 'CHECKING_FOR_UPDATE':
             return {
                 ...state,

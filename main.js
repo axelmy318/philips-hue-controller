@@ -102,12 +102,7 @@ app.on('activate', () => {
   }
 });
 
-/*app.on('ready', function()  {
-  autoUpdater.checkForUpdatesAndNotify();
-});*/
-
 ipcMain.handle('GET_APP_VERSION', async(event, arg) => {
-  //arg.callback(app.getVersion())
   let result
 
   await new Promise((resolve, reject) => {
@@ -115,7 +110,6 @@ ipcMain.handle('GET_APP_VERSION', async(event, arg) => {
    }).then(response => result = response)
 
   return app.getVersion()
-  //event.sender.send('app_version', { version: app.getVersion() });
 });
 
 ipcMain.handle('SAVE_TO_STORAGE', async(event, arg) => {
@@ -200,77 +194,3 @@ autoUpdater.on('update-not-available', () => {
   console.log('update not available')
   mainWindow.send('SET_UPDATE_STATUS', {status: 'UPDATE_NOT_AVAILABLE'})
 })
-
-/*ipcMain.on('CHECK_FOR_UPDATES', () => {
-  autoUpdater.checkForUpdatesAndNotify()
-})
-
-ipcMain.on('CHECK_FOR_UPDATE_TEST', (event, ...args) => {
-  mainWindow.send('UPDATE_STATUS', {version: 'xddd'})
-  console.log({version: 'xxxddd'})
-})
-
-autoUpdater.on('update-available', () => {
-  mainWindow.webContents.send('update_available');
-});
-autoUpdater.on('update-downloaded', () => {
-  mainWindow.webContents.send('update_downloaded');
-});
-
-autoUpdater.on("error", (error) => {
-  const dialogOpts = {
-  type: 'info',
-  buttons: ['Ok'],
-  title: 'Update available',
-  message: "dwda",
-  detail: error
-}
-dialog.showMessageBox(dialogOpts, (response) => {})
-})
-
-let progressDialog
-
-autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'Update available',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'Downloading update...'
-  }
-  mainWindow.webContents.send('update-available')
-
-  progressDialog = dialog.showMessageBox(dialogOpts, (response) => {})
-})
-
-autoUpdater.on('download-progress', (progressObj) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'Update available',
-    message: "Philips HUE Controller",
-    detail: `Download speed: ${progressObj.bytesPerSecond} | Downloaded  ${progressObj.percent}%`
-  }
-  //mainWindow.send('download-progress', {progressObj})
-//dialog.showMessageBox(dialogOpts, (response) => {})
-})
-
-autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Update downloaded',
-    message: process.platform === 'win32' ? releaseNotes: releaseName,
-    detail: 'The update has been downloaded. Restart the application to apply the update.'
-  }
-
-  mainWindow.send('UPDATE_DOWNLOADED', {version: 'xddd'})
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if(returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
-
-autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
-  mainWindow.webContents.send('update-available')
-})*/

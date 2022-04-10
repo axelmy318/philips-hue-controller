@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { IconContext } from 'react-icons'
 
-import { HsvColorPicker } from 'react-colorful'
 import { HuePicker, AlphaPicker } from 'react-color'
 
 import { FaRegLightbulb as LogoLightBulb } from 'react-icons/fa'
@@ -9,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { Status } from '../classes/Status'
 import { loadLightsForBridge, switchLightState } from '../redux/actions/Main'
 
-const LightControl = ({ device, light }) => {
+const LightControl = ({ bridge, light }) => {
     const dispatch = useDispatch()
     const lightCheckedRef = useRef()
 
@@ -20,7 +19,7 @@ const LightControl = ({ device, light }) => {
     //let hue = { h: light.state.hue / 65536, s: light.state.sat / 254 * 100, v: light.state.bri / 254 * 100 }
 
     if(light.isLoaded === Status.None) {
-      dispatch(loadLightsForBridge(device))
+      dispatch(loadLightsForBridge(bridge))
     }
 
     const changeHSV = (part, value, silently = false) => {
@@ -32,11 +31,11 @@ const LightControl = ({ device, light }) => {
     }
 
     const handleLightOnOff = () => {
-      dispatch(switchLightState(device, light, {on: !light.state.on}))
+      dispatch(switchLightState(bridge, light, {on: !light.state.on}))
     }
 
     const handleChangeLightsColor = ({ h, s, v }) => {
-      dispatch(switchLightState(device, light, {
+      dispatch(switchLightState(bridge, light, {
         on: true, 
         bri: Math.round(v * 254), 
         sat: Math.round(s * 254), 

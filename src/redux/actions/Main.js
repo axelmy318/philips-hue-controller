@@ -22,7 +22,8 @@ export const getBridgeUsername = (device, name) => {
 
 export const switchLightState = (device, light, newState) => {
     const endpoint = API.getUrl({...device, lightId: light.id}, 'CHANGE_LIGHT_STATE')
-
+    console.log('device', device)
+    console.log('light', light)
     return {
         type: 'CHANGE_LIGHT_STATE',
         payload: {

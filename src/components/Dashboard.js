@@ -10,7 +10,7 @@ import { loadLightsForBridge, validateBridgeConnection } from '../redux/actions/
 import BridgeList from './BridgeList'
 import Sidebar from './Sidebar'
 import MenuHeader from './MenuHeader'
-import LightingPage from './LightingPage'
+import ControlPage from './ControlPage'
 import SettingsPage from './SettingsPage'
 
 const Dashboard = () => {
@@ -29,7 +29,7 @@ const Dashboard = () => {
         id: "controls",
         icon: <LogoControls />,
         name: 'Controls',
-        component: <LightingPage />
+        component: <ControlPage />
       },
       scenes: {
         id: "scenes",
@@ -45,7 +45,7 @@ const Dashboard = () => {
       }
     }
 
-    const [ selectedMenu, setSelectedMenu ] = useState(menus['bridges'].id)
+    const [ selectedMenu, setSelectedMenu ] = useState(Object.keys(main.bridges).length > 0 ? menus['controls'].id : menus['bridges'].id)
 
     useEffect(() => {
       Object.keys(bridges).map(bridgeId => {

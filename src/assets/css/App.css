@@ -105,3 +105,7 @@ body {
   font-size: 150%;
   font-weight: bold;
 }
+
+.group-controls {
+  margin: 10px;
+}
