@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import LightControl from './LightControl'
 import { DeviceType } from '../classes/DeviceType'
 import { HuePicker, AlphaPicker } from 'react-color'
 import DeviceSmallCard from './DeviceSmallCard'
@@ -29,7 +28,8 @@ const GroupControl = ({ bridge, group }) => {
     }
 
     const getLightWhenMultipleSelected = () => {
-        let color = {h: 0, s: 1, v: 1}
+        //let color = {h: 0, s: 1, v: 1}
+        let color = null
 
         let tmpColor = null        
         let allColorsEqual = true
@@ -81,7 +81,9 @@ const GroupControl = ({ bridge, group }) => {
 
     const changeHSV = (part, value, silently = false) => {
         let tmpHue = hue
-        hue[part] = value
+        if(tmpHue === null)
+            tmpHue = {h: 0, s: 1, v: 1}
+        tmpHue[part] = value
         setHue({...tmpHue})
         if(!silently) {
             selected.map(lightId => {
@@ -104,11 +106,6 @@ const GroupControl = ({ bridge, group }) => {
             <div className="card-header light-control-bridge-title clickable" onClick={() => setOpen(!open)}>
                 {group.name}
             </div>
-            <div className='group-controls' style={{display: 'inline-flex'}}>
-                <HuePicker color={{h: hue.h, s: 1, v: 1}} onChangeComplete={(value) => {changeHSV('h', value.hsv.h)}} onChange={(value) => {changeHSV('h', value.hsv.h, true)}} />
-                <AlphaPicker color={{h: hue.h, s: 1, v: 1, a: hue.s}} onChangeComplete={(value) => {changeHSV('s', value.hsv.a)}} onChange={(value) => {changeHSV('s', value.hsv.a, true)}} />
-                <AlphaPicker color={{h: hue.h, s: hue.s, v: 1, a: hue.v}} onChangeComplete={(value) => {changeHSV('v', value.hsv.a)}} onChange={(value) => {changeHSV('v', value.hsv.a, true)}} />
-            </div>
             {open && <> 
                 {/*<div className="card-body">
                     { group.lights.map((light) => <React.Fragment key={light}>
@@ -119,7 +116,11 @@ const GroupControl = ({ bridge, group }) => {
                         }
                     </React.Fragment>)}
                     </div>*/}
-
+                <div className='group-controls' style={{display: 'inline-flex'}}>
+                    <HuePicker color={hue !== null ? {h: hue.h, s: 1, v: 1} : {h: 0, s: 1, v:1 }} onChangeComplete={(value) => {changeHSV('h', value.hsv.h)}} onChange={(value) => {changeHSV('h', value.hsv.h, true)}} />
+                    <AlphaPicker color={hue !== null ? {h: hue.h, s: 1, v: 1, a: hue.s} : {h: 0, s: 1, v:1 }} onChangeComplete={(value) => {changeHSV('s', value.hsv.a)}} onChange={(value) => {changeHSV('s', value.hsv.a, true)}} />
+                    <AlphaPicker color={hue !== null ? {h: hue.h, s: hue.s, v: 1, a: hue.v} : {h: 0, s: 1, v:1 }} onChangeComplete={(value) => {changeHSV('v', value.hsv.a)}} onChange={(value) => {changeHSV('v', value.hsv.a, true)}} />
+                </div>
                 <div className="card-body">
                     <div className="row row-cols-1 row-cols-md-6 g-2">
                     { group.lights.map((light) => <React.Fragment key={light}>

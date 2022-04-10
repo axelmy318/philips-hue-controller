@@ -21,22 +21,16 @@ const DeviceSmallCard = ({ bridge, device, isLight, isPlug, color, onSelect, sel
 
   if(color === null && !isLight)
     color = {h: 0, s: 1, v: 0}
-  else if(color === null && isLight){
-    console.log(device.name, ' settings color manually')
+  else if(color === null && isLight)
     color = {h: device.state.hue/65536*360, s: device.state.sat/254*100, v: device.state.bri/254*100}
-  }
-  else{
-    console.log('Color recieved', color)
+  else
     color = {h: color.h, s: color.s*100, v: color.v*100}
-    console.log('Color for ' , device.name, 'already set to ', color)
-  }
 
   if(device.isLoaded === Status.None) {
     dispatch(loadLightsForBridge(bridge))
   }
 
   const generateHSL = () => {
-    console.log(`hsl(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.v/2)}%)`)
     return `hsl(${Math.round(color.h)}, ${Math.round(color.s)}%, ${Math.round(color.v/2)}%)`
   }
 
