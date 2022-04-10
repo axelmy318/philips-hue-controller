@@ -1,29 +1,67 @@
-# Modern and Minimal Electron + React Starter Kit
-_Electron, React, Webpack -- Modern and up-to-date, with a handful of quality of life features included_
+# Philips HUE Controller 👋
 
-I made this starter kit as most boilerplates were either out-of-date, heavy handed, or enforced a structure on me that I just didnt like.
-With a very select assortment of modules, this starter kit is designed to get you up and running very quickly, and to let you easily drop in your own structure and tools on top of it.
-The basic structure of `src/` is intentionally minimal to make it easier to allow you to put your own twist on how you like things laid out.
+A desktop application that allows you to connect to your philips HUE bridges and controls the lights in your home 💡
 
-Production builds babel-minify is used, and ES2015/ES6 transpilation is provided -- As modern node and chromium versions support 99%+ of the ES6 feature set, I feel those steps are unnecessary.
+## Disclaimer
+The only purpose of this app is experimental. There are way better and more complete apps out there. This is just my take on an home automation app.
 
-If you like this project, check out [enhanced-electron-react-boilerplate](https://github.com/pbarbiero/enhanced-electron-react-boilerplate) which is this project with my take on additional modules (photon, redux, less, css modules etc) and my personal project structure (based on the redux ducks proposal) I suggest you give it a look if you want less of a minimalistic take on my starter kit.
+## Main stuff used in the project 🔨
+- Framework
+    - Electron, ReactJS + Redux, bootstrap
+- Building and packaging
+    - electron-packager, electron-builder, electron-updater
+- Other
+    - Philips HUE API
 
-### To get started:
-* Run `npm install`
+## Devices supported in the app 💻
+- Now
+  - HUE Bridges
+  - HUE Lightbulbs
+- Next...
+  - Smart plugs
+  - HUE Lightstrips
 
-##### Development
-* Run `npm run dev` to start webpack-dev-server. Electron will launch automatically after compilation.
+## How to use it 🤔
 
-##### Production
-_You have two options, an automatic build or two manual steps_
+### Connecting a bridge
+The first time you launch the app, you will land on the bridge page.
+From there. you can scan your network to find any bridges.
 
-###### One Shot
-* Run `npm run package` to have webpack compile your application into `dist/bundle.js` and `dist/index.html`, and then an electron-packager run will be triggered for the current platform/arch, outputting to `builds/`
+![image1](https://i.imgur.com/6YAsvGy.png)
 
-###### Manual
-_Recommendation: Update the "postpackage" script call in package.json to specify parameters as you choose and use the `npm run package` command instead of running these steps manually_
-* Run `npm run build` to have webpack compile and output your bundle to `dist/bundle.js`
-* Then you can call electron-packager directly with any commands you choose
+By clicking on "connect" on your HUE bridge, you will be asked to give it a name
 
-If you want to test the production build (In case you think Babili might be breaking something) after running `npm run build` you can then call `npm run prod`. This will cause electron to load off of the `dist/` build instead of looking for the webpack-dev-server instance. Electron will launch automatically after compilation.
+![image2](https://i.imgur.com/yGfYuLE.png)
+
+After clicking on "start", you will have 45s to press the link button (central button) on the HUE bridge.
+
+![image3](https://i.imgur.com/1fyzA5s.png)
+
+As soon as you clicked on the link button, the bridge will be added to your list. 
+
+![image4](https://i.imgur.com/8K2epYE.png)
+
+This list will then be saved to a local storage so that quitting or updating the apps doesn't require a reconnection.
+
+### Controlling your lights
+
+The lights connected to your bridge will be automatically loaded into the app.
+You can view and control them by clicking on the "Controls" tab in the sidebar
+
+![image5](https://i.imgur.com/nj82Pe0.png)
+
+To change and light's color, click on it. It will add to the selected lights, shown with a grey background. 
+
+By pressing "ctrl" at the same time you click on the light, you can select multiple lights to change all the colors at once.
+
+You can then play with the sliders on top to change the light's color.
+
+To switch a light on and off, you can simply click on the bottom of the ON/OFF text.
+
+### Updating the app
+
+In the settings tab, there is a card allowing you to automatically update the app.
+
+![image6](https://i.imgur.com/JZCfEMh.png)
+
+To update the app, click on "check for udpate". If a new version is available, it will be downloaded, showing a progress bar and percentage. Once the download is finished, you will be able to click on a button to restart and apply the update.

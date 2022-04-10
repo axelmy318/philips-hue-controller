@@ -8,7 +8,7 @@ import { loadLightsForBridge, switchLightState } from '../redux/actions/Main'
 const DeviceSmallCard = ({ bridge, device, isLight, isPlug, color, onSelect, selected }) => {
   const dispatch = useDispatch()
 
-  const statusShadowColor = 'cyan'
+  const statusShadowColor = 'green'
   const stateStyle = {
     //textShadow: `text-shadow: 0 0 10px #fff, 0 0 10px ${statusShadowColor}, 0 0 10px ${statusShadowColor}, 0 0 10px ${statusShadowColor}, 0 0 ${statusShadowSize}px ${statusShadowColor}, 0 0 10px ${statusShadowColor}, 0 0 ${statusShadowSize}px ${statusShadowColor};`
     textShadow: device.state.on ? `0 0 10px #fff, 0 0 5px ${statusShadowColor}, 0 0 5px ${statusShadowColor}, 0 0 5px ${statusShadowColor}, 0 0 5px ${statusShadowColor}, 0 0 5px ${statusShadowColor}, 0 0 5px ${statusShadowColor}` : 'none',
@@ -50,9 +50,9 @@ const DeviceSmallCard = ({ bridge, device, isLight, isPlug, color, onSelect, sel
 
   return (
     <div className="col col-md-2 text-center">
-      <div className={`card ${selected ? 'border-primary' : 'border-dark'} mb-3`} onClick={(e) => handleOnSelect(e)}>
-        <div className={`card-header ${selected ? 'text-primary' : 'text-dark'}`}>{device.name}</div>
-        <div className="card-body text-dark">
+      <div className={`card ${selected ? 'bg-secondary text-white' : 'border-dark text-dark'} mb-3`} onClick={(e) => handleOnSelect(e)}>
+        <div className={`card-header ${selected ? 'text-primary text-white' : 'text-dark'}`}>{device.name}</div>
+        <div className="card-body">
           <IconContext.Provider value={{color: generateHSL(), size: '50%'}}>
             {isLight && <LogoLightBulb />}
           </IconContext.Provider>

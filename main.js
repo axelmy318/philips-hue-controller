@@ -28,6 +28,8 @@ function createWindow() {
     maxWidth: 1920,
     maxHeight: 1080,
     show: false,
+    autoHideMenuBar: true,
+    title: 'Philips HUE Controller',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

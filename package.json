@@ -18,8 +18,8 @@
     "postpackage": "electron-packager ./ --out=./builds --overwrite",
     "dist": "electron-builder --win --x64 --publish never",
     "distDeploy": "electron-builder --win --x64 --publish always --config electron-builder.json",
-    "packAndDist": "rmdir /s /q builds 2>null && rmdir /s /q dist 2>null && npm run package && npm run dist",
-    "packAndDistDeploy": "rmdir /s /q builds 2>null && rmdir /s /q dist 2>null && npm run package && npm run distDeploy"
+    "packAndDist": "rmdir /s /q builds && rmdir /s /q dist && npm run package && npm run dist",
+    "packAndDistDeploy": "rmdir /s /q builds && rmdir /s /q dist && npm run package && npm run distDeploy"
   },
   "electronWebpack": {
     "commonSourceDirectory": "common",
