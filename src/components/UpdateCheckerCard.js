@@ -22,7 +22,6 @@ const UpdateCheckerCard = () => {
     
     const checkForUpdates = () => {
         ipcRenderer.send('CHECK_FOR_UPDATES')
-        //ipcRenderer.on('UPDATE_DOWNLOADED', (event, arg) => setButtonText('Ready to install'))
     }
 
     const restartApp = () => {

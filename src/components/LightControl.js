@@ -23,11 +23,12 @@ const LightControl = ({ device, light }) => {
       dispatch(loadLightsForBridge(device))
     }
 
-    const changeHSV = (part, value) => {
+    const changeHSV = (part, value, silently = false) => {
       let tmpHue = hue
       hue[part] = value
       setHue({...tmpHue})
-      handleChangeLightsColor(tmpHue)
+      if(!silently)
+        handleChangeLightsColor(tmpHue)
     }
 
     const handleLightOnOff = () => {
@@ -60,9 +61,9 @@ const LightControl = ({ device, light }) => {
                   <div className='col'>
                     <table>
                       <tbody>
-                        <tr><td>HUE</td><td><HuePicker color={{h: hue.h, s: 1, v: 1}} onChangeComplete={(value) => {changeHSV('h', value.hsv.h)}} /></td></tr>
-                        <tr><td>Saturation</td><td><AlphaPicker color={{h: hue.h, s: 1, v: 1, a: hue.s}} onChangeComplete={(value) => {changeHSV('s', value.hsv.a)}} /></td></tr>
-                        <tr><td>Brightness</td><td><AlphaPicker color={{h: hue.h, s: hue.s, v: 1, a: hue.v}} onChangeComplete={(value) => {changeHSV('v', value.hsv.a)}} /></td></tr>
+                        <tr><td>HUE</td><td><HuePicker color={{h: hue.h, s: 1, v: 1}} onChangeComplete={(value) => {changeHSV('h', value.hsv.h)}} onChange={(value) => {changeHSV('h', value.hsv.h, true)}} /></td></tr>
+                        <tr><td>Saturation</td><td><AlphaPicker color={{h: hue.h, s: 1, v: 1, a: hue.s}} onChangeComplete={(value) => {changeHSV('s', value.hsv.a)}} onChange={(value) => {changeHSV('s', value.hsv.a, true)}} /></td></tr>
+                        <tr><td>Brightness</td><td><AlphaPicker color={{h: hue.h, s: hue.s, v: 1, a: hue.v}} onChangeComplete={(value) => {changeHSV('v', value.hsv.a)}} onChange={(value) => {changeHSV('v', value.hsv.a, true)}} /></td></tr>
                       </tbody>
                     </table>
                   </div>

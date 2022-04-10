@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ipcRenderer } from 'electron';
 
 import '../assets/css/sidebars.css'
@@ -13,25 +13,27 @@ const Sidebar = ({ selectedMenu, setSelectedMenu, menus }) => {
 
     return (
     <>
-        <div className="d-flex flex-column flex-shrink-0 p-5 text-white bg-dark" style={{height: '100vh'}}>
-            <span className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <svg className="bi me-2" width="40" height="32"></svg>
-            <span className="fs-4" onClick={() => getAppVersion()}>PHC {version}</span>
-
+        <div className="d-flex flex-column flex-shrink-0 p-0 pt-5 text-white bg-dark" style={{height: '100vh'}}>
+            <span className="d-flex align-items-center text-white text-decoration-none">
+                <h2 style={{paddingLeft: '20%'}}>PHC</h2>
             </span>
             <hr />
             <ul className="nav nav-pills flex-column mb-auto">
                 { Object.keys(menus).map((item, index) => <React.Fragment key={index}><li className={`nav-item`}>
-                        <div onClick={() => setSelectedMenu(item)} style={{marginRight: '10%', marginLeft: '10%'}} className={`mt-3 mb-3 text-125 text-center clickable nav-link text-white ${selectedMenu === item && 'active bg-info'}`}>
+                        <div onClick={() => setSelectedMenu(item)} className={`text-125 text-center clickable pt-4 pb-4 text-white ${selectedMenu === item && 'active bg-info'}`}>
                             {menus[item].icon} {menus[item].name}
                         </div>
                     </li>
 
-                    {index < Object.keys(menus).length-1 && <hr />}
+                    {/*index < Object.keys(menus).length-1 && <hr />*/}
                 </React.Fragment>)
                 }
             </ul>
-            
+            <div style={{paddingLeft: '20%'}}>
+                <p className='text-muted'>
+                    v{version}
+                </p>
+            </div>
         </div>
         <script src="../assets/js/sidebars.js"></script>
         <script src="../assets/js/bootstrap.bundle.min.js"></script>

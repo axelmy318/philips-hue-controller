@@ -1,6 +1,6 @@
 {
   "name": "philips-hue-controller",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Control your lights using this app",
   "author": "Axel Milliery",
   "homepage": "https://github.com/axelmy_318/philips-hue-controller",
@@ -18,8 +18,8 @@
     "postpackage": "electron-packager ./ --out=./builds --overwrite",
     "dist": "electron-builder --win --x64 --publish never",
     "distDeploy": "electron-builder --win --x64 --publish always --config electron-builder.json",
-    "packAndDist": "npm run package && npm run dist",
-    "packAndDistDeploy": "npm run package && npm run distDeploy"
+    "packAndDist": "rmdir /s /q builds && rmdir /s /q dist && npm run package && npm run dist",
+    "packAndDistDeploy": "rmdir /s /q builds && rmdir /s /q dist && npm run package && npm run distDeploy"
   },
   "electronWebpack": {
     "commonSourceDirectory": "common",
@@ -64,7 +64,7 @@
     "electron-differential-updater": "^4.3.2",
     "electron-json-storage": "^4.5.0",
     "electron-log": "^4.4.6",
-    "electron-updater": "^4.2.5",
+    "electron-updater": "^4.4.6",
     "find-local-ips": "^0.0.8",
     "local-devices": "^3.2.0",
     "react-color": "^2.19.3",

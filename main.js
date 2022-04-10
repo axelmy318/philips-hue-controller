@@ -6,7 +6,7 @@ const axios = require('axios')
 const path = require('path')
 const url = require('url')
 const storage = require('electron-json-storage')
-const { autoUpdater } = require('electron-updater');
+const { autoUpdater } = require('electron-updater')
 const log = require('electron-log');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
